@@ -1,14 +1,14 @@
 ![Node.js CI](https://github.com/ncbecker/cra-with-server-template/workflows/Node.js%20CI/badge.svg)
 
-# Boilerplate for Create-React-App with an Express.js API
+# Podium - a social podcast app
 
-## Update dependencies:
+According to [Podcast Hosting](https://podcasthosting.org/podcast-statistics/) there are over 1,500,000 podcasts and over 34 million episodes as of November 2020.
 
-- Run `$ npx npm-check-updates -u`
-- Check new releases and changes
-- Run `$ npm install` to update the shown dependencies
-- Note: Create-React-App should be updated as a whole
-- Note: You might have to run a specific install for major releases
+Votes and comments will help you find interesting, single episodes without searching through whole shows.
+
+## Design:
+
+https://xd.adobe.com/view/47c0820e-b7e7-4464-b887-bf6c82e7c496-1293/
 
 ## Technologies used:
 
@@ -23,12 +23,3 @@
 - [GitHub Node.js CI](https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs)
 - [nodemon](https://github.com/remy/nodemon)
 - [concurrently](https://github.com/kimmobrunfeldt/concurrently)
-
-## Useful resources regarding the setup:
-
-- https://create-react-app.dev/docs/proxying-api-requests-in-development
-- https://devcenter.heroku.com/articles/runtime-principles#web-servers
-- https://docs.npmjs.com/cli/v6/configuring-npm/package-json
-- https://eslint.org/docs/rules/
-- https://create-react-app.dev/docs/running-tests/
-- https://testing-library.com/docs/dom-testing-library/api-queries/
