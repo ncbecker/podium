@@ -1,56 +1,41 @@
-import React from "react";
+import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import "./button.css";
+import { ReactComponent as Spotify } from "../../assets/icon-spotify.svg";
 
-/**
- * Primary UI component for user interaction
- */
-const Button = ({ primary, backgroundColor, size, label, ...props }) => {
-  const mode = primary
-    ? "storybook-button--primary"
-    : "storybook-button--secondary";
+export const ActionButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 248px;
+  height: 57px;
+  background-color: var(--action-light);
+  border: none;
+  border-radius: 30px;
+  box-shadow: var(--button-shadow-light);
+  cursor: pointer;
+  span {
+    color: var(--button-text-light);
+    font-weight: medium;
+    margin-right: 10px;
+  }
+  svg {
+    fill: var(--icon-light);
+  }
+`;
+
+export const LogInButton = () => {
   return (
-    <button
-      type="button"
-      className={["storybook-button", `storybook-button--${size}`, mode].join(
-        " "
-      )}
-      style={backgroundColor && { backgroundColor }}
-      {...props}
-    >
-      {label}
-    </button>
+    <ActionButton>
+      <span>Log in with Spotify</span>
+      <Spotify />
+    </ActionButton>
   );
 };
 
-Button.propTypes = {
-  /**
-   * Is this the principal call to action on the page?
-   */
-  primary: PropTypes.bool,
-  /**
-   * What background color to use
-   */
-  backgroundColor: PropTypes.string,
-  /**
-   * How large should the button be?
-   */
-  size: PropTypes.oneOf(["small", "medium", "large"]),
-  /**
-   * Button contents
-   */
-  label: PropTypes.string.isRequired,
-  /**
-   * Optional click handler
-   */
+LogInButton.propTypes = {
   onClick: PropTypes.func,
 };
 
-Button.defaultProps = {
-  backgroundColor: null,
-  primary: false,
-  size: "medium",
+LogInButton.defaultProps = {
   onClick: undefined,
 };
-
-export default Button;
