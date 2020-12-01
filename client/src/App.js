@@ -1,9 +1,10 @@
-import "./App.css";
+import GlobalStyle from "./GlobalStyle";
 import Page from "./pages/Page";
 
 function App() {
   return (
     <div className="App">
+      <GlobalStyle />
       <Page
         onLogin={() => console.log("login")}
         onLogout={() => console.log("logout")}
