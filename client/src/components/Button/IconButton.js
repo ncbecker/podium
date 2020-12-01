@@ -38,7 +38,7 @@ export const BurgerMenuButton = () => {
 
 export const CloseButton = () => {
   return (
-    <IconButton nav>
+    <IconButton>
       <Close />
     </IconButton>
   );
@@ -62,7 +62,7 @@ export const LogOutButton = () => {
 
 export const FilterButton = () => {
   return (
-    <IconButton nav>
+    <IconButton>
       <Filter />
     </IconButton>
   );
@@ -70,7 +70,7 @@ export const FilterButton = () => {
 
 export const InfoButton = () => {
   return (
-    <IconButton nav>
+    <IconButton>
       <Info />
     </IconButton>
   );
@@ -78,7 +78,7 @@ export const InfoButton = () => {
 
 export const AddToSpotifyButton = () => {
   return (
-    <IconButton nav>
+    <IconButton>
       <AddToSpotify />
     </IconButton>
   );
