@@ -50,15 +50,16 @@ body {
 
 button {
   font: inherit;
-  color: var(--action-light);
+  padding: 0px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  :hover {
-    text-decoration: underline;
-  }}
+  }
 `;
 
 export default GlobalStyle;
