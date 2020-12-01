@@ -39,11 +39,15 @@ const GlobalStyle = createGlobalStyle`
   --no-like-on-bg-dark: #CAF0F8CB;
 }
 
+html{
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-size: 16px;
   font-family: var(--font-family);
+  color: var(--text-light);
   background: var(--bg-light);
   height: 100vh
 }
