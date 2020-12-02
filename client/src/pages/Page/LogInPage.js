@@ -1,12 +1,13 @@
 import styled from "styled-components/macro";
 import { ThemeTogglerButton } from "../../components/Button/IconButton.js";
 import { ReactComponent as Logo } from "../../assets/text-logo-iheart.svg";
-import { LogInButton, SkipLogIn } from "../../components/Button/Button.js";
+import { LogInButton } from "../../components/Button/Button.js";
+import { SkipLogIn } from "../../components/Button/SkipLogIn.js";
 
 const PageWrapper = styled.div`
-  max-width: 834px;
   height: 100vh;
   display: grid;
+  grid-template-columns: minmax(auto, 834px);
   grid-template-rows: auto 1fr 2fr 2fr 1fr;
 `;
 
