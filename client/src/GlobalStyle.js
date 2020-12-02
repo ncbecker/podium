@@ -39,26 +39,31 @@ const GlobalStyle = createGlobalStyle`
   --no-like-on-bg-dark: #CAF0F8CB;
 }
 
+html{
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-size: 16px;
   font-family: var(--font-family);
+  color: var(--text-light);
   background: var(--bg-light);
   height: 100vh
 }
 
 button {
   font: inherit;
-  color: var(--action-light);
+  padding: 0px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  :hover {
-    text-decoration: underline;
-  }}
+  }
 `;
 
 export default GlobalStyle;
