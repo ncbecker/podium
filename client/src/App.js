@@ -3,7 +3,8 @@ import GlobalStyle from "./GlobalStyle";
 import LogInPage from "./pages/Page/LogInPage";
 
 const AppWrapper = styled.div`
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 `;
 
 function App() {
