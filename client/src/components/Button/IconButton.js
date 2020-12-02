@@ -20,65 +20,65 @@ export const IconButton = styled.button`
   }
 `;
 
-export const ThemeTogglerButton = () => {
+export const ThemeTogglerButton = ({ ...props }) => {
   return (
-    <IconButton nav>
+    <IconButton nav {...props}>
       <ThemeToggler />
     </IconButton>
   );
 };
 
-export const BurgerMenuButton = () => {
+export const BurgerMenuButton = ({ ...props }) => {
   return (
-    <IconButton nav>
+    <IconButton nav {...props}>
       <BurgerMenu />
     </IconButton>
   );
 };
 
-export const CloseButton = () => {
+export const CloseButton = ({ ...props }) => {
   return (
-    <IconButton>
+    <IconButton {...props}>
       <Close />
     </IconButton>
   );
 };
 
-export const ArrowBackButton = () => {
+export const ArrowBackButton = ({ ...props }) => {
   return (
-    <IconButton nav>
+    <IconButton nav {...props}>
       <ArrowBack />
     </IconButton>
   );
 };
 
-export const LogOutButton = () => {
+export const LogOutButton = ({ ...props }) => {
   return (
-    <IconButton nav>
+    <IconButton nav {...props}>
       <LogOut />
     </IconButton>
   );
 };
 
-export const FilterButton = () => {
+export const FilterButton = ({ ...props }) => {
   return (
-    <IconButton>
+    <IconButton {...props}>
       <Filter />
     </IconButton>
   );
 };
 
-export const InfoButton = () => {
+export const InfoButton = ({ ...props }) => {
   return (
-    <IconButton>
+    <IconButton {...props}>
       <Info />
     </IconButton>
   );
 };
 
-export const AddToSpotifyButton = () => {
+export const AddToSpotifyButton = ({ ...props }) => {
   return (
-    <IconButton>
+    <IconButton {...props}>
       <AddToSpotify />
     </IconButton>
   );
