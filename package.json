@@ -48,6 +48,7 @@
     "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "react-lottie": "^1.2.3"
   }
 }
