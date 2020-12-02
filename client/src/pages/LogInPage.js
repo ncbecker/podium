@@ -1,8 +1,8 @@
 import styled from "styled-components/macro";
-import { ThemeTogglerButton } from "../../components/Button/IconButton.js";
-import { ReactComponent as Logo } from "../../assets/text-logo-iheart.svg";
-import { LogInButton } from "../../components/Button/Button.js";
-import { SkipLogIn } from "../../components/Button/SkipLogIn.js";
+import { ThemeTogglerButton } from "../components/IconButton.js";
+import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { LogInButton } from "../components/Button.js";
+import { SkipLogIn } from "../components/SkipLogIn.js";
 
 const PageWrapper = styled.div`
   height: 100vh;

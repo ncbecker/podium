@@ -1,12 +1,12 @@
 import { IconButton } from "./IconButton";
-import { ReactComponent as ThemeToggler } from "../../assets/icon-sun-empty.svg";
-import { ReactComponent as BurgerMenu } from "../../assets/icon-burger-menu.svg";
-import { ReactComponent as Close } from "../../assets/icon-close.svg";
-import { ReactComponent as ArrowBack } from "../../assets/icon-arrow-back.svg";
-import { ReactComponent as LogOut } from "../../assets/icon-logout.svg";
-import { ReactComponent as Filter } from "../../assets/icon-filter.svg";
-import { ReactComponent as Info } from "../../assets/icon-info-full.svg";
-import { ReactComponent as AddToSpotify } from "../../assets/add-to-spotify.svg";
+import { ReactComponent as ThemeToggler } from "../assets/icon-sun-empty.svg";
+import { ReactComponent as BurgerMenu } from "../assets/icon-burger-menu.svg";
+import { ReactComponent as Close } from "../assets/icon-close.svg";
+import { ReactComponent as ArrowBack } from "../assets/icon-arrow-back.svg";
+import { ReactComponent as LogOut } from "../assets/icon-logout.svg";
+import { ReactComponent as Filter } from "../assets/icon-filter.svg";
+import { ReactComponent as Info } from "../assets/icon-info-full.svg";
+import { ReactComponent as AddToSpotify } from "../assets/add-to-spotify.svg";
 
 export default {
   title: "Podium/IconButton",

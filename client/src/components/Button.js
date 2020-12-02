@@ -1,6 +1,6 @@
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import { ReactComponent as Spotify } from "../../assets/icon-spotify.svg";
+import { ReactComponent as Spotify } from "../assets/icon-spotify.svg";
 
 const ActionButton = styled.button`
   display: flex;
