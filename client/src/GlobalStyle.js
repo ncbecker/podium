@@ -49,7 +49,8 @@ body {
   font-family: var(--font-family);
   color: var(--text-light);
   background: var(--bg-light);
-  height: 100vh
+  height: 100vh;
+  width: 100vw;
 }
 
 button {
@@ -58,6 +59,7 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+  outline: none;
 }
 
 a {
