@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components/macro";
 import Lottie from "react-lottie";
 import animationData from "../assets/lotties/heart-burst.json";
+import PropTypes from "prop-types";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
 import Placeholder from "../assets/placeholder-episode-pic.jpeg";
@@ -18,6 +19,7 @@ const Card = styled.div`
 `;
 
 const EpisodeInfos = styled.div`
+  min-width: 250px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -56,8 +58,16 @@ const LottieContainer = styled.div`
   left: -180px;
 `;
 
-export const EpisodeCard = () => {
-  const [isLiked, setIsLiked] = useState(false);
+export const placeholderInfo = {
+  imgsrc: Placeholder,
+  imgalt: "Placeholder",
+  title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
+  userLiked: false,
+  likes: 0,
+};
+
+export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
+  const [isLiked, setIsLiked] = useState(userLiked);
 
   const defaultOptions = {
     loop: false,
@@ -75,15 +85,14 @@ export const EpisodeCard = () => {
   return (
     <Card>
       <EpisodeInfos>
-        <img src={Placeholder} alt="Placeholder" />
-        <span>Sehnsucht nach New York / Fernsehabend mit Jan und Olli</span>
+        <img src={imgsrc} alt={imgalt} />
+        <span>{title}</span>
       </EpisodeInfos>
       <LikeContainer>
         <LikeButton onClick={handleClickLike}>
-          {!isLiked && <NotLiked />}
-          {isLiked && <Liked />}
+          {isLiked ? <Liked /> : <NotLiked />}
         </LikeButton>
-        <LikeCounter>148</LikeCounter>
+        <LikeCounter>{likes}</LikeCounter>
         <LottieContainer>
           <Lottie
             options={defaultOptions}
@@ -95,4 +104,12 @@ export const EpisodeCard = () => {
       </LikeContainer>
     </Card>
   );
+};
+
+EpisodeCard.propTypes = {
+  imgsrc: PropTypes.string,
+  imgalt: PropTypes.string,
+  title: PropTypes.string,
+  userLiked: PropTypes.bool,
+  likes: PropTypes.number,
 };
