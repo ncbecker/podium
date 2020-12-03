@@ -23,3 +23,9 @@ https://xd.adobe.com/view/47c0820e-b7e7-4464-b887-bf6c82e7c496-1293/
 - [GitHub Node.js CI](https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs)
 - [nodemon](https://github.com/remy/nodemon)
 - [concurrently](https://github.com/kimmobrunfeldt/concurrently)
+- [Styled Components](https://styled-components.com/)
+- [React Lottie](https://github.com/chenqingspring/react-lottie)
+
+## Attributions:
+
+- [Like Button Animation by Cliffex](https://lottiefiles.com/8821-like-button?lang=de)
