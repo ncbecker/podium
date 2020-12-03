@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import GlobalStyle from "./GlobalStyle";
-// import LogInPage from "./pages/LogInPage";
-import VotingPage from "./pages/VotingPage";
+import LogInPage from "./pages/LogInPage";
 
 const AppWrapper = styled.div`
   display: flex;
@@ -12,8 +11,7 @@ function App() {
   return (
     <AppWrapper>
       <GlobalStyle />
-      {/* <LogInPage /> */}
-      <VotingPage />
+      <LogInPage />
     </AppWrapper>
   );
 }
