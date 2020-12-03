@@ -7,7 +7,6 @@ import { SkipLogIn } from "../components/SkipLogIn.js";
 const PageWrapper = styled.div`
   height: 100vh;
   display: grid;
-  grid-template-columns: minmax(auto, 834px);
   grid-template-rows: auto 1fr 2fr 2fr 1fr;
 `;
 

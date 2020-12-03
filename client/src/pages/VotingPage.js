@@ -9,7 +9,6 @@ const PageWrapper = styled.div`
   height: 100vh;
   overflow-x: hidden;
   display: grid;
-  grid-template-columns: minmax(auto, 834px);
   grid-template-rows: auto auto 1fr;
 `;
 
