@@ -8,18 +8,19 @@ import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 const PageWrapper = styled.div`
   height: 100vh;
   overflow-x: hidden;
+  width: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr;
 `;
 
 const TopBar = styled.div`
+  width: 320px;
   grid-row: 1 / 2;
   place-self: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-areas: "menu logo .";
   place-items: center;
-  width: 100%;
 `;
 
 const BurgerMenu = styled(BurgerMenuButton)`
