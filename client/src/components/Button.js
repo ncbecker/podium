@@ -16,7 +16,7 @@ const ActionButton = styled.button`
   cursor: pointer;
   span {
     color: var(--button-text-light);
-    font-weight: medium;
+    font-weight: 500;
     margin-right: 10px;
   }
   svg {
