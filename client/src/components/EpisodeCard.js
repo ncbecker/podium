@@ -12,6 +12,7 @@ const Card = styled.div`
   height: 115px;
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 15px;
   background: var(--cards-light);
   display: flex;
   justify-content: center;
@@ -29,8 +30,10 @@ const EpisodeInfos = styled.div`
     border-radius: 5px;
   }
   span {
+    height: 80px;
     margin: 0 5px;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -43,12 +46,11 @@ const LikeContainer = styled.div`
 
 const LikeButton = styled.button`
   margin-bottom: 5px;
-  z-index: 1;
 `;
 
 const LikeCounter = styled.div`
   font-size: 0.75rem;
-  font-weight: medium;
+  font-weight: 500;
   color: var(--button-text-light);
 `;
 
@@ -56,9 +58,11 @@ const LottieContainer = styled.div`
   position: absolute;
   top: -180px;
   left: -180px;
+  pointer-events: none;
 `;
 
 export const placeholderInfo = {
+  episodeId: 1,
   imgsrc: Placeholder,
   imgalt: "Placeholder",
   title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
