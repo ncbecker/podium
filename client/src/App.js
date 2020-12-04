@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import GlobalStyle from "./GlobalStyle";
-import LogInPage from "./pages/Page/LogInPage";
+import LogInPage from "./pages/LogInPage";
 
 const AppWrapper = styled.div`
   display: flex;
