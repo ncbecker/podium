@@ -1,8 +1,8 @@
 const EpisodeDetailsPage = () => {
   return (
-    <>
+
       <div>EpisodeDetailsPage</div>
-    </>
+    
   );
 };
 
