@@ -8,6 +8,7 @@ import { ReactComponent as LogOut } from "../assets/icon-logout.svg";
 import { ReactComponent as Filter } from "../assets/icon-filter.svg";
 import { ReactComponent as Info } from "../assets/icon-info-full.svg";
 import { ReactComponent as AddToSpotify } from "../assets/add-to-spotify.svg";
+import { useHistory } from "react-router-dom";
 
 export const IconButton = styled.button`
   display: flex;
@@ -29,40 +30,78 @@ export const ThemeTogglerButton = ({ ...props }) => {
 };
 
 export const BurgerMenuButton = ({ ...props }) => {
+  const history = useHistory();
+
   return (
-    <IconButton nav {...props}>
+    <IconButton
+      nav
+      onClick={() => {
+        history.push("/user");
+      }}
+      {...props}
+    >
       <BurgerMenu />
     </IconButton>
   );
 };
 
 export const CloseButton = ({ ...props }) => {
+  const history = useHistory();
+
   return (
-    <IconButton {...props}>
+    <IconButton
+      onClick={() => {
+        history.goBack();
+      }}
+      {...props}
+    >
       <Close />
     </IconButton>
   );
 };
 
 export const ArrowBackButton = ({ ...props }) => {
+  const history = useHistory();
+
   return (
-    <IconButton nav {...props}>
+    <IconButton
+      nav
+      onClick={() => {
+        history.goBack();
+      }}
+      {...props}
+    >
       <ArrowBack />
     </IconButton>
   );
 };
 
 export const LogOutButton = ({ ...props }) => {
+  const history = useHistory();
+
   return (
-    <IconButton nav {...props}>
+    <IconButton
+      nav
+      onClick={() => {
+        history.push("/login");
+      }}
+      {...props}
+    >
       <LogOut />
     </IconButton>
   );
 };
 
 export const FilterButton = ({ ...props }) => {
+  const history = useHistory();
+
   return (
-    <IconButton {...props}>
+    <IconButton
+      onClick={() => {
+        history.push("/filter");
+      }}
+      {...props}
+    >
       <Filter />
     </IconButton>
   );
