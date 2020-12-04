@@ -25,6 +25,7 @@ https://xd.adobe.com/view/47c0820e-b7e7-4464-b887-bf6c82e7c496-1293/
 - [concurrently](https://github.com/kimmobrunfeldt/concurrently)
 - [Styled Components](https://styled-components.com/)
 - [React Lottie](https://github.com/chenqingspring/react-lottie)
+- [React Router](https://reactrouter.com/)
 
 ## Attributions:
 
