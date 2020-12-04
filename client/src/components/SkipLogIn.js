@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { InfoButton } from "./IconButton";
 
 const SkipLogInWrapper = styled.div`
@@ -50,7 +51,9 @@ export const SkipLogIn = () => {
   return (
     <>
       <SkipLogInWrapper>
-        <a href="/storybook">Skip and let me vote!</a>
+        <Link to="/vote">
+          <span>Skip and let me vote!</span>
+        </Link>
         <InfoButton onClick={handleClickInfo} />
         {visible && (
           <InfoBubbleWrapper>

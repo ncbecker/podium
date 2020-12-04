@@ -1,6 +1,7 @@
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
 import { ReactComponent as Spotify } from "../assets/icon-spotify.svg";
+import { useHistory } from "react-router-dom";
 
 const ActionButton = styled.button`
   display: flex;
@@ -25,8 +26,13 @@ const ActionButton = styled.button`
 `;
 
 export const LogInButton = () => {
+  const history = useHistory();
   return (
-    <ActionButton>
+    <ActionButton
+      onClick={() => {
+        history.push("/vote");
+      }}
+    >
       <span>Log in with Spotify</span>
       <Spotify />
     </ActionButton>
