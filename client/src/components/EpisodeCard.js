@@ -15,7 +15,7 @@ const Card = styled.div`
   margin-bottom: 15px;
   background: var(--cards-light);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -31,7 +31,7 @@ const EpisodeInfos = styled.div`
   }
   span {
     height: 80px;
-    margin: 0 5px;
+    margin: 0 10px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -72,6 +72,8 @@ export const placeholderInfo = {
 
 export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
   const [isLiked, setIsLiked] = useState(userLiked);
+  const [playLottie, setPlayLottie] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes);
 
   const defaultOptions = {
     loop: false,
@@ -83,7 +85,14 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
   };
 
   const handleClickLike = () => {
-    setIsLiked(!isLiked);
+    if (isLiked) {
+      setIsLiked(!isLiked);
+      setLikeCount(likeCount - 1);
+    } else {
+      setIsLiked(!isLiked);
+      setPlayLottie(!playLottie);
+      setLikeCount(likeCount + 1);
+    }
   };
 
   return (
@@ -96,13 +105,13 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
         <LikeButton onClick={handleClickLike}>
           {isLiked ? <Liked /> : <NotLiked />}
         </LikeButton>
-        <LikeCounter>{likes}</LikeCounter>
+        <LikeCounter>{likeCount}</LikeCounter>
         <LottieContainer>
           <Lottie
             options={defaultOptions}
             height={400}
             width={400}
-            isStopped={!isLiked}
+            isStopped={!playLottie}
           />
         </LottieContainer>
       </LikeContainer>
