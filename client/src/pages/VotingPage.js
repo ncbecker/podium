@@ -4,11 +4,13 @@ import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { EpisodeSearch } from "../components/EpisodeSearch.js";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import Placeholder from "../assets/placeholder-episode-pic.jpeg";
+import FilterPage from "./FilterPage.js";
+import { useState } from "react";
 
 const PageWrapper = styled.div`
+  width: 100%;
   height: 100vh;
   overflow-x: hidden;
-  width: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr;
 `;
@@ -57,7 +59,7 @@ const placeholderInfoArray = [
     imgalt: "Placeholder",
     title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
     userLiked: false,
-    likes: 0,
+    likes: 12,
   },
   {
     episodeId: 2,
@@ -65,7 +67,7 @@ const placeholderInfoArray = [
     imgalt: "Placeholder",
     title: "Short title",
     userLiked: true,
-    likes: 1,
+    likes: 15,
   },
   {
     episodeId: 3,
@@ -79,6 +81,11 @@ const placeholderInfoArray = [
 ];
 
 function VotingPage() {
+  const [open, setOpen] = useState(false);
+  const handleClickFilter = () => {
+    setOpen(!open);
+  };
+
   return (
     <PageWrapper>
       <TopBar>
@@ -89,8 +96,9 @@ function VotingPage() {
       </TopBar>
       <SearchWrapper>
         <EpisodeSearch />
-        <FilterButton />
+        <FilterButton onClick={handleClickFilter} />
       </SearchWrapper>
+      <FilterPage open={open} onClick={handleClickFilter} />
       <CardsWrapper>
         {placeholderInfoArray.map((placeholderInfo) => (
           <EpisodeCard

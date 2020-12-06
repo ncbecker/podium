@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 import { ReactComponent as ThemeToggler } from "../assets/icon-sun-empty.svg";
 import { ReactComponent as BurgerMenu } from "../assets/icon-burger-menu.svg";
 import { ReactComponent as Close } from "../assets/icon-close.svg";
@@ -8,7 +9,6 @@ import { ReactComponent as LogOut } from "../assets/icon-logout.svg";
 import { ReactComponent as Filter } from "../assets/icon-filter.svg";
 import { ReactComponent as Info } from "../assets/icon-info-full.svg";
 import { ReactComponent as AddToSpotify } from "../assets/add-to-spotify.svg";
-import { useHistory } from "react-router-dom";
 
 export const IconButton = styled.button`
   display: flex;
@@ -45,16 +45,9 @@ export const BurgerMenuButton = ({ ...props }) => {
   );
 };
 
-export const CloseButton = ({ ...props }) => {
-  const history = useHistory();
-
+export const CloseButton = ({ onClick }) => {
   return (
-    <IconButton
-      onClick={() => {
-        history.goBack();
-      }}
-      {...props}
-    >
+    <IconButton nav onClick={onClick}>
       <Close />
     </IconButton>
   );
@@ -92,18 +85,13 @@ export const LogOutButton = ({ ...props }) => {
   );
 };
 
-export const FilterButton = ({ ...props }) => {
-  const history = useHistory();
-
+export const FilterButton = ({ onClick }) => {
   return (
-    <IconButton
-      onClick={() => {
-        history.push("/filter");
-      }}
-      {...props}
-    >
-      <Filter />
-    </IconButton>
+    <>
+      <IconButton onClick={onClick}>
+        <Filter />
+      </IconButton>
+    </>
   );
 };
 
@@ -130,4 +118,12 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
   onClick: undefined,
+};
+
+FilterButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+CloseButton.propTypes = {
+  onClick: PropTypes.func,
 };
