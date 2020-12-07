@@ -16,7 +16,7 @@ const PageWrapper = styled.div`
 `;
 
 const TopBar = styled.div`
-  width: 320px;
+  width: 100%;
   grid-row: 1 / 2;
   place-self: center;
   display: grid;
@@ -39,10 +39,11 @@ const LogoContainer = styled.div`
 `;
 
 const SearchWrapper = styled.div`
+  width: 320px;
   grid-row: 2 / 3;
   place-self: center;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 

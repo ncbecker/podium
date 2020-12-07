@@ -9,19 +9,18 @@ const FilterPageWrapper = styled.div`
   left: calc(50% - 187.5px);
   z-index: 1;
   width: 375px;
-  height: ${({ open }) => (open ? "calc(100vh - 123px)" : "0")};
+  height: ${({ open }) => (open ? "100%" : "0")};
   background: var(--input-overlay-light);
   border-radius: 15px 15px 0 0;
   transition: height 0.4s ease-in-out;
-  /* display: ${({ open }) => (open ? "block" : "none")};
-  transform: ${({ open }) => (open ? "translateY(0)" : "translateY(100%)")}; */
+  overflow: hidden;
 `;
 
 const FilterWrapper = styled.div`
   width: 100%;
   padding: 15px;
   display: grid;
-  grid-template-rows: repeat(4, auto-fit);
+  grid-template-rows: repeat(4, auto);
 `;
 
 const TopBar = styled.div`

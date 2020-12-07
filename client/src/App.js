@@ -8,6 +8,8 @@ import UserPage from "./pages/UserPage";
 import MenuLogInPage from "./pages/MenuLogInPage";
 
 const AppWrapper = styled.div`
+  max-width: 375px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
 `;

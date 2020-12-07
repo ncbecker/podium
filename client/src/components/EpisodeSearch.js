@@ -6,7 +6,7 @@ const InputField = styled.input`
   width: 265px;
   height: 45px;
   padding: 0 20px;
-  margin: 15px 5px;
+  margin: 15px 0;
   background: var(--input-overlay-light);
   border: none;
   outline: none;

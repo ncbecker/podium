@@ -5,6 +5,7 @@ import { LogInButton } from "../components/Button.js";
 import { SkipLogIn } from "../components/SkipLogIn.js";
 
 const PageWrapper = styled.div`
+  width: 100%;
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr 2fr 2fr 1fr;
