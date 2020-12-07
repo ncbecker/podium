@@ -1,4 +1,5 @@
-import { EpisodeCard, placeholderInfo } from "./EpisodeCard";
+import { EpisodeCard } from "./EpisodeCard";
+import PlaceholderIMG from "../assets/placeholder-episode-pic.jpeg";
 
 export default {
   title: "Podium/Cards",
@@ -10,9 +11,9 @@ const Template = (args) => <EpisodeCard {...args} />;
 
 export const ExampleEpisode = Template.bind({});
 ExampleEpisode.args = {
-  imgsrc: placeholderInfo.imgsrc,
-  imgalt: placeholderInfo.imgalt,
-  title: placeholderInfo.title,
-  userLiked: placeholderInfo.userLiked,
-  likes: placeholderInfo.likes,
+  imgsrc: PlaceholderIMG,
+  imgalt: "Placeholder",
+  title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
+  userLiked: false,
+  likes: 42,
 };

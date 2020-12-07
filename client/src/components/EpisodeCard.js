@@ -5,7 +5,6 @@ import animationData from "../assets/lotties/heart-burst.json";
 import PropTypes from "prop-types";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
-import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 
 const Card = styled.div`
   width: 320px;
@@ -15,7 +14,7 @@ const Card = styled.div`
   margin-bottom: 15px;
   background: var(--cards-light);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -31,7 +30,7 @@ const EpisodeInfos = styled.div`
   }
   span {
     height: 80px;
-    margin: 0 5px;
+    margin: 0 10px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -61,17 +60,10 @@ const LottieContainer = styled.div`
   pointer-events: none;
 `;
 
-export const placeholderInfo = {
-  episodeId: 1,
-  imgsrc: Placeholder,
-  imgalt: "Placeholder",
-  title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
-  userLiked: false,
-  likes: 0,
-};
-
 export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
   const [isLiked, setIsLiked] = useState(userLiked);
+  const [playLottie, setPlayLottie] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes);
 
   const defaultOptions = {
     loop: false,
@@ -83,7 +75,14 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
   };
 
   const handleClickLike = () => {
-    setIsLiked(!isLiked);
+    if (isLiked) {
+      setIsLiked(!isLiked);
+      setLikeCount(likeCount - 1);
+    } else {
+      setIsLiked(!isLiked);
+      setPlayLottie(!playLottie);
+      setLikeCount(likeCount + 1);
+    }
   };
 
   return (
@@ -96,13 +95,13 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
         <LikeButton onClick={handleClickLike}>
           {isLiked ? <Liked /> : <NotLiked />}
         </LikeButton>
-        <LikeCounter>{likes}</LikeCounter>
+        <LikeCounter>{likeCount}</LikeCounter>
         <LottieContainer>
           <Lottie
             options={defaultOptions}
             height={400}
             width={400}
-            isStopped={!isLiked}
+            isStopped={!playLottie}
           />
         </LottieContainer>
       </LikeContainer>

@@ -3,11 +3,13 @@ import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LogInPage from "./pages/LogInPage";
 import VotingPage from "./pages/VotingPage";
-import FilterPage from "./pages/FilterPage";
+import EpisodeDetailsPage from "./pages/EpisodeDetailsPage";
 import UserPage from "./pages/UserPage";
 import MenuLogInPage from "./pages/MenuLogInPage";
 
 const AppWrapper = styled.div`
+  max-width: 375px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
 `;
@@ -30,8 +32,8 @@ function App() {
           <Route path="/login">
             <MenuLogInPage />
           </Route>
-          <Route path="/filter">
-            <FilterPage />
+          <Route path="/details">
+            <EpisodeDetailsPage />
           </Route>
         </Switch>
       </AppWrapper>

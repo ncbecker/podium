@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { ReactComponent as Spotify } from "../assets/icon-spotify.svg";
 import { useHistory } from "react-router-dom";
 
-const ActionButton = styled.button`
+export const ActionButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,10 +39,10 @@ export const LogInButton = () => {
   );
 };
 
-LogInButton.propTypes = {
+ActionButton.propTypes = {
   onClick: PropTypes.func,
 };
 
-LogInButton.defaultProps = {
+ActionButton.defaultProps = {
   onClick: undefined,
 };
