@@ -5,7 +5,6 @@ import animationData from "../assets/lotties/heart-burst.json";
 import PropTypes from "prop-types";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
-import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 
 const Card = styled.div`
   width: 320px;
@@ -60,15 +59,6 @@ const LottieContainer = styled.div`
   left: -180px;
   pointer-events: none;
 `;
-
-export const placeholderInfo = {
-  episodeId: 1,
-  imgsrc: Placeholder,
-  imgalt: "Placeholder",
-  title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
-  userLiked: false,
-  likes: 0,
-};
 
 export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
   const [isLiked, setIsLiked] = useState(userLiked);
