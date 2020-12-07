@@ -72,6 +72,13 @@ const StyledLabel = styled.label`
   cursor: pointer;
 `;
 
+const time = [
+  { time: "week", label: "Best of last week" },
+  { time: "month", label: "Best of last month" },
+  { time: "year", label: "Best of last year" },
+  { time: "alltime", label: "Best of all time" },
+];
+
 const categories = [
   { category: "comedy", label: "Comedy", checked: true },
   { category: "crime", label: "True crime", checked: true },
@@ -95,15 +102,11 @@ const categories = [
 ];
 
 function FilterPage({ open, onClick }) {
-  const [timeFilter, setTimeFilter] = useState("alltime");
+  const [timeFilter, setTimeFilter] = useState(time[3].time);
   const [categoryFilter, setCategoryFilter] = useState(categories);
 
-  const handleChangeTime = (event) => {
-    setTimeFilter(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    // event.prevent.default();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     console.log(timeFilter);
     console.log(categoryFilter);
   };
@@ -118,49 +121,24 @@ function FilterPage({ open, onClick }) {
         <FilterTimeContainer>
           <FilterSubHeading>Time</FilterSubHeading>
           <StyledForm onSubmit={handleSubmit}>
-            <StyledInput
-              type="radio"
-              id="filterWeek"
-              checked={timeFilter === "week"}
-              value="week"
-              onChange={handleChangeTime}
-            />
-            <StyledLabel htmlFor="filterWeek" checked={timeFilter === "week"}>
-              Best of last week
-            </StyledLabel>
-            <StyledInput
-              type="radio"
-              id="filterMonth"
-              checked={timeFilter === "month"}
-              value="month"
-              onChange={handleChangeTime}
-            />
-            <StyledLabel htmlFor="filterMonth" checked={timeFilter === "month"}>
-              Best of last month
-            </StyledLabel>
-            <StyledInput
-              type="radio"
-              id="filterYear"
-              checked={timeFilter === "year"}
-              value="year"
-              onChange={handleChangeTime}
-            />
-            <StyledLabel htmlFor="filterYear" checked={timeFilter === "year"}>
-              Best of last year
-            </StyledLabel>
-            <StyledInput
-              type="radio"
-              id="filterAllTime"
-              checked={timeFilter === "alltime"}
-              value="alltime"
-              onChange={handleChangeTime}
-            />
-            <StyledLabel
-              htmlFor="filterAllTime"
-              checked={timeFilter === "alltime"}
-            >
-              Best of last all time
-            </StyledLabel>
+            {time.map((t) => (
+              <StyledLabel
+                key={t.time}
+                htmlFor={t.time}
+                checked={timeFilter === t.time}
+              >
+                <StyledInput
+                  type="radio"
+                  id={t.time}
+                  checked={timeFilter === t.time}
+                  value={t.time}
+                  onChange={(event) => {
+                    setTimeFilter(event.target.value);
+                  }}
+                />
+                <span>{t.label}</span>
+              </StyledLabel>
+            ))}
           </StyledForm>
         </FilterTimeContainer>
         <FilterCategoryContainer>
