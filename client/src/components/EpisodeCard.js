@@ -1,8 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
+import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 import Lottie from "react-lottie";
 import animationData from "../assets/lotties/heart-burst.json";
-import PropTypes from "prop-types";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
 
@@ -23,6 +24,7 @@ const EpisodeInfos = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  cursor: pointer;
   img {
     width: 80px;
     height: 80px;
@@ -64,6 +66,7 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
   const [isLiked, setIsLiked] = useState(userLiked);
   const [playLottie, setPlayLottie] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
+  const history = useHistory();
 
   const defaultOptions = {
     loop: false,
@@ -87,7 +90,11 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
 
   return (
     <Card>
-      <EpisodeInfos>
+      <EpisodeInfos
+        onClick={() => {
+          history.push("/details");
+        }}
+      >
         <img src={imgsrc} alt={imgalt} />
         <span>{title}</span>
       </EpisodeInfos>

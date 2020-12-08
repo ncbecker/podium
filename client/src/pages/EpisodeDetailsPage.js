@@ -1,5 +1,161 @@
-function EpisodeDetailsPage() {
-  return <div>EpisodeDetailsPage</div>;
+import styled from "styled-components/macro";
+import PropTypes from "prop-types";
+import {
+  AddToSpotifyButton,
+  ArrowBackButton,
+} from "../components/IconButton.js";
+import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
+import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
+
+const PageWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: repeat(6, auto) 1fr;
+`;
+
+const TopBar = styled.div`
+  width: 100%;
+  grid-row: 1 / 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "back logo .";
+  place-items: center;
+`;
+
+const ArrowBack = styled(ArrowBackButton)`
+  grid-area: "back";
+  justify-self: start;
+`;
+
+const LogoContainer = styled.div`
+  grid-area: "logo";
+  svg {
+    width: 53.67px;
+    height: 16px;
+  }
+`;
+
+const TitleWrapper = styled.div`
+  width: 320px;
+  margin: 10px 0;
+  padding-left: 20px;
+  grid-row: 2 / 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  span {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+`;
+
+const ShowTitle = styled.span`
+  width: 320px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  grid-row: 3 / 4;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+const Description = styled.span`
+  width: 320px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  grid-row: 4 / 5;
+`;
+
+const Stats = styled.span`
+  width: 320px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  grid-row: 5 / 6;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+const ButtonWrapper = styled.div`
+  width: 320px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  grid-row: 6 / 7;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const LikedSmall = styled(Liked)`
+  height: 23.09px;
+  width: 24px;
+  margin-left: 10px;
+  display: block;
+`;
+
+const NotLikedSmall = styled(NotLiked)`
+  height: 23.09px;
+  width: 24px;
+  margin-left: 10px;
+  display: block;
+`;
+
+function EpisodeDetailsPage({
+  imgsrc,
+  imgalt,
+  title,
+  show,
+  description,
+  date,
+  duration,
+  likes,
+  onClick,
+  userLiked,
+}) {
+  return (
+    <PageWrapper>
+      <TopBar>
+        <ArrowBack />
+        <LogoContainer>
+          <Logo />
+        </LogoContainer>
+      </TopBar>
+      <TitleWrapper>
+        <img src={imgsrc} alt={imgalt} />
+        <span>{title}</span>
+      </TitleWrapper>
+      <ShowTitle>{show}</ShowTitle>
+      <Description>{description}</Description>
+      <Stats>{date + " | " + duration + " | " + likes + " Likes"}</Stats>
+      <ButtonWrapper>
+        <AddToSpotifyButton />
+        <button onClick={onClick}>
+          {userLiked ? <LikedSmall /> : <NotLikedSmall />}
+        </button>
+      </ButtonWrapper>
+    </PageWrapper>
+  );
 }
 
 export default EpisodeDetailsPage;
+
+EpisodeDetailsPage.propTypes = {
+  imgsrc: PropTypes.string,
+  imgalt: PropTypes.string,
+  title: PropTypes.string,
+  show: PropTypes.string,
+  description: PropTypes.string,
+  date: PropTypes.string,
+  duration: PropTypes.number,
+  likes: PropTypes.number,
+  onClick: PropTypes.func,
+  userLiked: PropTypes.bool,
+};
