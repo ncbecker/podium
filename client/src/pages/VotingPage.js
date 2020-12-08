@@ -53,12 +53,19 @@ const CardsWrapper = styled.div`
   justify-self: center;
 `;
 
-const placeholderInfoArray = [
+export const placeholderInfoArray = [
   {
     episodeId: 1,
     imgsrc: Placeholder,
     imgalt: "Placeholder",
-    title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
+    title:
+      "Sehnsucht nach New York / Fernsehabend mit Jan und Olli Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
+    show:
+      "Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig",
+    description:
+      "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
+    date: "3. Okt.",
+    duration: "85 Min.",
     userLiked: false,
     likes: 12,
   },
@@ -67,6 +74,11 @@ const placeholderInfoArray = [
     imgsrc: Placeholder,
     imgalt: "Placeholder",
     title: "Short title",
+    show: "Fest & Flauschig",
+    description:
+      "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
+    date: "3. Okt.",
+    duration: "85 Min.",
     userLiked: true,
     likes: 15,
   },
@@ -76,6 +88,11 @@ const placeholderInfoArray = [
     imgalt: "Placeholder",
     title:
       "Sehnsucht nach New York / Fernsehabend mit Jan und Olli und Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
+    show: "Fest & Flauschig",
+    description:
+      "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
+    date: "3. Okt.",
+    duration: "85 Min.",
     userLiked: false,
     likes: 0,
   },

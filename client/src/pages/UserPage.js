@@ -5,19 +5,17 @@ import { EpisodeCard } from "../components/EpisodeCard.js";
 import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 
 const PageWrapper = styled.div`
+  width: 100%;
   height: 100vh;
   overflow-x: hidden;
-  width: 100%;
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: repeat(3, auto) 1fr;
 `;
 
 const TopBar = styled.div`
-  width: 320px;
+  width: 100%;
   grid-row: 1 / 2;
-  place-self: center;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   grid-template-areas: "back logo logout";
   place-items: center;
 `;
@@ -29,6 +27,7 @@ const ArrowBack = styled(ArrowBackButton)`
 
 const LogoContainer = styled.div`
   grid-area: "logo";
+  place-self: center;
   svg {
     width: 53.67px;
     height: 16px;
@@ -40,8 +39,26 @@ const LogOut = styled(LogOutButton)`
   justify-self: end;
 `;
 
-const CardsWrapper = styled.div`
+const WelcomeWrapper = styled.span`
+  grid-row: 2 / 3;
+  justify-self: self-start;
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+const TitleWrapper = styled.span`
   grid-row: 3 / 4;
+  justify-self: self-start;
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 20px;
+`;
+
+const CardsWrapper = styled.div`
+  grid-row: 4 / 5;
   align-self: start;
   justify-self: center;
 `;
@@ -67,6 +84,8 @@ function UserPage() {
         </LogoContainer>
         <LogOut />
       </TopBar>
+      <WelcomeWrapper>Welcome XYZ 👋</WelcomeWrapper>
+      <TitleWrapper>Your favorites</TitleWrapper>
       <CardsWrapper>
         {placeholderInfoArray.map((placeholderInfo) => (
           <EpisodeCard

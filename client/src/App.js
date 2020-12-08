@@ -2,7 +2,7 @@ import styled from "styled-components";
 import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LogInPage from "./pages/LogInPage";
-import VotingPage from "./pages/VotingPage";
+import VotingPage, { placeholderInfoArray } from "./pages/VotingPage";
 import EpisodeDetailsPage from "./pages/EpisodeDetailsPage";
 import UserPage from "./pages/UserPage";
 import MenuLogInPage from "./pages/MenuLogInPage";
@@ -13,6 +13,8 @@ const AppWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+const placeholderInfo = placeholderInfoArray[0];
 
 function App() {
   return (
@@ -33,7 +35,17 @@ function App() {
             <MenuLogInPage />
           </Route>
           <Route path="/details">
-            <EpisodeDetailsPage />
+            <EpisodeDetailsPage
+              imgsrc={placeholderInfo.imgsrc}
+              imgalt={placeholderInfo.imgalt}
+              title={placeholderInfo.title}
+              show={placeholderInfo.show}
+              description={placeholderInfo.description}
+              date={placeholderInfo.date}
+              duration={placeholderInfo.duration}
+              likes={placeholderInfo.likes}
+              userLiked={placeholderInfo.userLiked}
+            />
           </Route>
         </Switch>
       </AppWrapper>
