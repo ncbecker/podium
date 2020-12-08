@@ -4,14 +4,16 @@ import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { LogInButton } from "../components/Button.js";
 
 const PageWrapper = styled.div`
+  width: 100%;
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr 2fr 2fr 1fr;
 `;
 
 const TopBar = styled.div`
+  width: 100%;
   grid-row: 1 / 2;
-  justify-self: end;
+  justify-self: start;
 `;
 
 const LogoWrapper = styled.div`
