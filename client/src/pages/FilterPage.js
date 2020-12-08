@@ -7,7 +7,7 @@ const FilterPageWrapper = styled.div`
   position: absolute;
   bottom: 0;
   left: calc(50% - 187.5px);
-  z-index: 1;
+  z-index: 10;
   width: 375px;
   height: ${({ open }) => (open ? "100%" : "0")};
   background: var(--input-overlay-light);
