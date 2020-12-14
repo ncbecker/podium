@@ -17,7 +17,7 @@ EpisodeDetailsExample.args = {
   description:
     "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
   date: "3. Okt.",
-  duration: "85 Min.",
+  duration: 4139102,
   likes: 42,
   userLiked: false,
 };

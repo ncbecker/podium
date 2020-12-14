@@ -1,9 +1,8 @@
-import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
 
 const InputField = styled.input`
-  width: 265px;
+  width: 250px;
   height: 45px;
   padding: 0 20px;
   margin: 15px 0;
@@ -13,30 +12,22 @@ const InputField = styled.input`
   border-radius: 30px;
 `;
 
-export const EpisodeSearch = () => {
-  const [searchData, setSearchData] = useState("");
-
-  const handleChange = (event) => {
-    setSearchData(event.target.value);
-    console.log(searchData);
-  };
-
-  function handleSubmit(event) {
-    event.preventDefault();
-  }
-
+export const EpisodeSearch = ({ value, onChange }) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <InputField
-        type="text"
-        placeholder="Search your favorite episodes..."
-        name="episode"
-        value={searchData}
-        onChange={handleChange}
-        required
-      />
-    </form>
+    <InputField
+      type="text"
+      placeholder="Search your favorite episodes..."
+      name="episode"
+      value={value}
+      onChange={onChange}
+      required
+    />
   );
+};
+
+EpisodeSearch.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 InputField.propTypes = {

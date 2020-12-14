@@ -120,6 +120,12 @@ function EpisodeDetailsPage({
   onClick,
   userLiked,
 }) {
+  const calcDuration = (duration) => {
+    return Math.round(duration / 60000);
+  };
+
+  const durationInMin = calcDuration(duration);
+
   return (
     <PageWrapper>
       <TopBar>
@@ -134,7 +140,9 @@ function EpisodeDetailsPage({
       </TitleWrapper>
       <ShowTitle>{show}</ShowTitle>
       <Description>{description}</Description>
-      <Stats>{date + " | " + duration + " | " + likes + " Likes"}</Stats>
+      <Stats>
+        {date + " | " + durationInMin + " Min. | " + likes + " Likes"}
+      </Stats>
       <ButtonWrapper>
         <AddToSpotifyButton />
         <button onClick={onClick}>

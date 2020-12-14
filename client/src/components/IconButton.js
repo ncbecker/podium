@@ -7,6 +7,7 @@ import { ReactComponent as Close } from "../assets/icon-close.svg";
 import { ReactComponent as ArrowBack } from "../assets/icon-arrow-back.svg";
 import { ReactComponent as LogOut } from "../assets/icon-logout.svg";
 import { ReactComponent as Filter } from "../assets/icon-filter.svg";
+import { ReactComponent as Search } from "../assets/icon-search.svg";
 import { ReactComponent as Info } from "../assets/icon-info-full.svg";
 import { ReactComponent as AddToSpotify } from "../assets/add-to-spotify.svg";
 
@@ -95,6 +96,14 @@ export const FilterButton = ({ onClick }) => {
   );
 };
 
+export const SearchButton = ({ onClick }) => {
+  return (
+      <IconButton onClick={onClick}>
+        <Search />
+      </IconButton>
+  );
+};
+
 export const InfoButton = ({ ...props }) => {
   return (
     <IconButton {...props}>
@@ -121,6 +130,10 @@ IconButton.defaultProps = {
 };
 
 FilterButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+SearchButton.propTypes = {
   onClick: PropTypes.func,
 };
 
