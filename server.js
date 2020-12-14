@@ -1,9 +1,25 @@
-require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const { getEpisodeInfo } = require("./lib/SpotifyMethods");
+const { getAppAccessToken } = require("./lib/SpotifyAccess");
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+app.get("/oauth/apptoken", async (request, response) => {
+  const apptoken = await getAppAccessToken();
+  console.log(apptoken);
+  response.send(apptoken);
+});
+
+app.get("/api/episode/:id", async (request, response) => {
+  const { id } = request.params;
+  const token = request.headers.authorization;
+  console.log(id);
+  console.log(token);
+  const episodeData = await getEpisodeInfo(token, id);
+  response.send(episodeData);
+});
 
 // Serve any static files
 app.use(express.static(path.join(__dirname, "client/build")));
