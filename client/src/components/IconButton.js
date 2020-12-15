@@ -98,9 +98,9 @@ export const FilterButton = ({ onClick }) => {
 
 export const SearchButton = ({ onClick }) => {
   return (
-      <IconButton onClick={onClick}>
-        <Search />
-      </IconButton>
+    <IconButton onClick={onClick}>
+      <Search />
+    </IconButton>
   );
 };
 
