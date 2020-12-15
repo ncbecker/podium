@@ -3,6 +3,7 @@ import { ThemeTogglerButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { LogInButton } from "../components/Button.js";
 import { SkipLogIn } from "../components/SkipLogIn.js";
+import { authorizeUser } from "../utils/api.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -20,6 +21,7 @@ const LogoWrapper = styled.div`
   grid-row: 3 / 4;
   place-self: center;
 `;
+
 const ButtonWrapper = styled.div`
   grid-row: 4 / 5;
   place-self: center;
@@ -35,7 +37,12 @@ function LogInPage() {
         <Logo />
       </LogoWrapper>
       <ButtonWrapper>
-        <LogInButton />
+        <LogInButton
+          onClick={async () => {
+            const url = await authorizeUser();
+            window.location.href = url;
+          }}
+        />
         <SkipLogIn />
       </ButtonWrapper>
     </PageWrapper>
