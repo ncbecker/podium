@@ -36,7 +36,7 @@ function LogInPage() {
         <Logo />
       </LogoWrapper>
       <ButtonWrapper>
-        <a href="http://localhost:3001/oauth/spotify/authorize">
+        <a href="/oauth/spotify/authorize">
           <LogInButton />
         </a>
         <SkipLogIn />
