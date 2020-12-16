@@ -3,7 +3,6 @@ import { ThemeTogglerButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { LogInButton } from "../components/Button.js";
 import { SkipLogIn } from "../components/SkipLogIn.js";
-import { authorizeUser } from "../utils/api.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -37,12 +36,9 @@ function LogInPage() {
         <Logo />
       </LogoWrapper>
       <ButtonWrapper>
-        <LogInButton
-          onClick={async () => {
-            const url = await authorizeUser();
-            window.location.href = url;
-          }}
-        />
+        <a href="http://localhost:3001/oauth/spotify/authorize">
+          <LogInButton />
+        </a>
         <SkipLogIn />
       </ButtonWrapper>
     </PageWrapper>

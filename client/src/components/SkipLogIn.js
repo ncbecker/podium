@@ -51,7 +51,7 @@ export const SkipLogIn = () => {
   return (
     <>
       <SkipLogInWrapper>
-        <Link to="/vote">
+        <Link to="/">
           <span>Skip and let me vote!</span>
         </Link>
         <InfoButton onClick={handleClickInfo} />

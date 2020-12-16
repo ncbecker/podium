@@ -11,6 +11,8 @@ import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 import FilterPage from "./FilterPage.js";
 import { useState } from "react";
 import { getAppAccessToken, getEpisodeInfo } from "../utils/api.js";
+import { useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -108,24 +110,28 @@ function VotingPage() {
   const [searchData, setSearchData] = useState("");
   const [fetchData, setFetchData] = useState([]);
 
+  const { login } = useAuth();
+
+  useEffect(() => {
+    login();
+  }, []);
+
   const handleClickFilter = () => {
     setOpen(!open);
   };
 
   const handleChangeSearch = (event) => {
     setSearchData(event.target.value);
-    console.log(searchData);
   };
 
   const handleSubmitSearch = async (event) => {
     event.preventDefault();
-    const apptoken = await getAppAccessToken();
-    const episodeData = await getEpisodeInfo(apptoken, searchData);
+    await getAppAccessToken();
+    const episodeData = await getEpisodeInfo(searchData);
     setFetchData([
       ...fetchData,
       { ...episodeData, userLiked: false, likes: 0 },
     ]);
-    console.log(fetchData);
     setSearchData("");
   };
 
