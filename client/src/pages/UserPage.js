@@ -3,6 +3,7 @@ import { ArrowBackButton, LogOutButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import Placeholder from "../assets/placeholder-episode-pic.jpeg";
+import { useAuth } from "../contexts/AuthContext.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -75,6 +76,8 @@ const placeholderInfoArray = [
 ];
 
 function UserPage() {
+  const { user, logout } = useAuth();
+
   return (
     <PageWrapper>
       <TopBar>
@@ -82,9 +85,9 @@ function UserPage() {
         <LogoContainer>
           <Logo />
         </LogoContainer>
-        <LogOut />
+        <LogOut onClick={logout} />
       </TopBar>
-      <WelcomeWrapper>Welcome XYZ 👋</WelcomeWrapper>
+      <WelcomeWrapper>Welcome {user.display_name} 👋</WelcomeWrapper>
       <TitleWrapper>Your favorites</TitleWrapper>
       <CardsWrapper>
         {placeholderInfoArray.map((placeholderInfo) => (
