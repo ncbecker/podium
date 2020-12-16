@@ -21,6 +21,8 @@ app.use(cookieParser());
 
 // OAuth Spotify
 
+// Authorization Code Flow
+
 app.get("/oauth/spotify/authorize", (request, response) => {
   const url =
     "https://accounts.spotify.com/authorize?" +
@@ -40,47 +42,102 @@ app.get("/oauth/spotify/validate", async (request, response) => {
     expires_in: expiresIn,
     refresh_token: refreshToken,
   } = await getUserAccessToken(code);
-  response.setHeader(
-    "Set-Cookie",
-    `access=${JSON.stringify({
-      accessToken,
-      refreshToken,
-    })};path=/;Max-Age=${expiresIn}`
-  );
-  response.send("Authorized. You can close this window :)");
+  response.cookie("access", accessToken, {
+    maxAge: (expiresIn - 60) * 1000,
+  });
+  response.cookie("refresh", refreshToken);
+  response.redirect("http://localhost:3000/vote");
 });
 
-app.get("/oauth/spotify/apptoken", async (request, response) => {
-  const appToken = await getAppAccessToken();
-  response.send(appToken);
-});
-
-app.get("/oauth/spotify/usertoken", async (request, response) => {
-  const authCode = request.headers.authorization;
-  const userToken = await getUserAccessToken(authCode);
-  response.send(userToken);
+app.get("/oauth/spotify/logout", async (request, response) => {
+  response.clearCookie("access");
+  response.clearCookie("refresh");
+  response.status(200).send("Cookies cleared");
 });
 
 app.get("/oauth/spotify/refreshtoken", async (request, response) => {
-  const refreshToken = request.headers.authorization;
-  const refreshedAccessToken = await refreshUserAccessToken(refreshToken);
-  response.send(refreshedAccessToken);
+  const refreshToken = request.cookies.refresh;
+  try {
+    const {
+      access_token: newAccessToken,
+      expires_in: expiresIn,
+      refresh_token: newRefreshToken,
+    } = await refreshUserAccessToken(refreshToken);
+    response.cookie("access", newAccessToken, {
+      maxAge: (expiresIn - 60) * 1000,
+    });
+    if (newRefreshToken) {
+      response.cookie("refresh", newRefreshToken);
+    }
+  } catch (error) {
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
+    console.error(error);
+  }
+});
+
+// Client Credentials Flow
+
+app.get("/oauth/spotify/apptoken", async (request, response) => {
+  const {
+    access_token: appToken,
+    expires_in: expiresIn,
+  } = await getAppAccessToken();
+  response.cookie("apptoken", appToken, {
+    maxAge: (expiresIn - 60) * 1000,
+  });
+  response.status(200).send("App Token Cookie is set!");
 });
 
 // Spotify API
 
 app.get("/api/user/profile", async (request, response) => {
-  const { access } = request.cookies;
-  const { accessToken } = JSON.parse(access);
+  const accessToken = request.cookies.access;
+  const refreshToken = request.cookies.refresh;
+  if (!accessToken && !refreshToken) {
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
+    return;
+  }
+  if (!accessToken) {
+    const {
+      access_token: newAccessToken,
+      expires_in: expiresIn,
+      refresh_token: newRefreshToken,
+    } = await refreshUserAccessToken(refreshToken);
 
-  const userProfileData = await getCurrentUserProfile(accessToken);
-  response.send(userProfileData);
+    response.cookie("access", newAccessToken, {
+      maxAge: (expiresIn - 60) * 1000,
+    });
+    if (newRefreshToken) {
+      response.cookie("refresh", newRefreshToken);
+    }
+    const userProfileData = await getCurrentUserProfile(newAccessToken);
+    response.send(userProfileData);
+    return;
+  }
+  try {
+    const userProfileData = await getCurrentUserProfile(accessToken);
+    response.send(userProfileData);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 app.get("/api/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const token = request.headers.authorization;
-  const episodeData = await getEpisodeInfo(token, id);
+  const accessToken = request.cookies.apptoken;
+  if (!accessToken) {
+    const {
+      access_token: newAppToken,
+      expires_in: expiresIn,
+    } = await getAppAccessToken();
+    response.cookie("apptoken", newAppToken, {
+      maxAge: (expiresIn - 60) * 1000,
+    });
+    const episodeData = await getEpisodeInfo(newAppToken, id);
+    response.send(episodeData);
+    return;
+  }
+  const episodeData = await getEpisodeInfo(accessToken, id);
   response.send(episodeData);
 });
 
@@ -97,5 +154,5 @@ app.get("*", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+  console.log(`Podium server listening at http://localhost:${port}`);
 });
