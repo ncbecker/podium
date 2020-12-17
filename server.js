@@ -20,7 +20,17 @@ const port = process.env.PORT || 3001;
 
 app.use(cookieParser());
 
-// OAuth Spotify
+// OAuth Spotify API
+
+// Client Credentials Flow
+
+app.get("/oauth/spotify/apptoken", async (request, response) => {
+  const { access_token, expires_in } = await getAppAccessToken();
+  response.cookie("appaccess", access_token, {
+    maxAge: (expires_in - 60) * 1000,
+  });
+  response.status(200).send("App Access Token Cookie is set!");
+});
 
 // Authorization Code Flow
 
@@ -38,15 +48,13 @@ app.get("/oauth/spotify/authorize", (request, response) => {
 
 app.get("/oauth/spotify/validate", async (request, response) => {
   const { code } = request.query;
-  const {
-    access_token: accessToken,
-    expires_in: expiresIn,
-    refresh_token: refreshToken,
-  } = await getUserAccessToken(code);
-  response.cookie("access", accessToken, {
-    maxAge: (expiresIn - 60) * 1000,
+  const { access_token, expires_in, refresh_token } = await getUserAccessToken(
+    code
+  );
+  response.cookie("access", access_token, {
+    maxAge: (expires_in - 60) * 1000,
   });
-  response.cookie("refresh", refreshToken);
+  response.cookie("refresh", refresh_token);
   response.redirect("http://localhost:3000/vote");
 });
 
@@ -57,20 +65,21 @@ app.get("/oauth/spotify/logout", async (request, response) => {
 });
 
 app.get("/oauth/spotify/refreshtoken", async (request, response) => {
-  const refreshToken = request.cookies.refresh;
+  let refreshToken = request.cookies.refresh;
   try {
     const {
-      access_token: newAccessToken,
-      expires_in: expiresIn,
-      refresh_token: newRefreshToken,
+      access_token,
+      expires_in,
+      refresh_token,
     } = await refreshUserAccessToken(refreshToken);
 
-    response.cookie("access", newAccessToken, {
-      maxAge: (expiresIn - 60) * 1000,
+    response.cookie("access", access_token, {
+      maxAge: (expires_in - 60) * 1000,
     });
 
-    if (newRefreshToken) {
-      response.cookie("refresh", newRefreshToken);
+    if (refresh_token) {
+      response.cookie("refresh", refresh_token);
+      refreshToken = refresh_token;
     }
   } catch (error) {
     console.error(error);
@@ -78,20 +87,7 @@ app.get("/oauth/spotify/refreshtoken", async (request, response) => {
   }
 });
 
-// Client Credentials Flow
-
-app.get("/oauth/spotify/apptoken", async (request, response) => {
-  const {
-    access_token: appAccessToken,
-    expires_in: expiresIn,
-  } = await getAppAccessToken();
-  response.cookie("appaccess", appAccessToken, {
-    maxAge: (expiresIn - 60) * 1000,
-  });
-  response.status(200).send("App Access Token Cookie is set!");
-});
-
-// Spotify API
+// Spotify API Requests
 
 app.get("/api/user/profile", async (request, response) => {
   let accessToken = request.cookies.access;
@@ -104,19 +100,19 @@ app.get("/api/user/profile", async (request, response) => {
 
   if (!accessToken) {
     const {
-      access_token: newAccessToken,
-      expires_in: expiresIn,
-      refresh_token: newRefreshToken,
+      access_token,
+      expires_in,
+      refresh_token,
     } = await refreshUserAccessToken(refreshToken);
 
-    response.cookie("access", newAccessToken, {
-      maxAge: (expiresIn - 60) * 1000,
+    response.cookie("access", access_token, {
+      maxAge: (expires_in - 60) * 1000,
     });
-    accessToken = newAccessToken;
+    accessToken = access_token;
 
-    if (newRefreshToken) {
-      response.cookie("refresh", newRefreshToken);
-      refreshToken = newRefreshToken;
+    if (refresh_token) {
+      response.cookie("refresh", refresh_token);
+      refreshToken = refresh_token;
     }
   }
 
@@ -151,14 +147,11 @@ app.get("/api/episode/:id", async (request, response) => {
   let appAccessToken = request.cookies.appaccess;
 
   if (!appAccessToken) {
-    const {
-      access_token: newAppAccessToken,
-      expires_in: expiresIn,
-    } = await getAppAccessToken();
-    response.cookie("appaccess", newAppAccessToken, {
-      maxAge: (expiresIn - 60) * 1000,
+    const { access_token, expires_in } = await getAppAccessToken();
+    response.cookie("appaccess", access_token, {
+      maxAge: (expires_in - 60) * 1000,
     });
-    appAccessToken = newAppAccessToken;
+    appAccessToken = access_token;
   }
 
   try {
