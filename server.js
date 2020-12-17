@@ -7,6 +7,7 @@ const querystring = require("querystring");
 const {
   getEpisodeInfo,
   getCurrentUserProfile,
+  searchEpisode,
 } = require("./lib/SpotifyMethods");
 const {
   getAppAccessToken,
@@ -63,15 +64,17 @@ app.get("/oauth/spotify/refreshtoken", async (request, response) => {
       expires_in: expiresIn,
       refresh_token: newRefreshToken,
     } = await refreshUserAccessToken(refreshToken);
+
     response.cookie("access", newAccessToken, {
       maxAge: (expiresIn - 60) * 1000,
     });
+
     if (newRefreshToken) {
       response.cookie("refresh", newRefreshToken);
     }
   } catch (error) {
-    response.redirect("http://localhost:3001/oauth/spotify/authorize");
     console.error(error);
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
   }
 });
 
@@ -79,24 +82,26 @@ app.get("/oauth/spotify/refreshtoken", async (request, response) => {
 
 app.get("/oauth/spotify/apptoken", async (request, response) => {
   const {
-    access_token: appToken,
+    access_token: appAccessToken,
     expires_in: expiresIn,
   } = await getAppAccessToken();
-  response.cookie("apptoken", appToken, {
+  response.cookie("appaccess", appAccessToken, {
     maxAge: (expiresIn - 60) * 1000,
   });
-  response.status(200).send("App Token Cookie is set!");
+  response.status(200).send("App Access Token Cookie is set!");
 });
 
 // Spotify API
 
 app.get("/api/user/profile", async (request, response) => {
-  const accessToken = request.cookies.access;
-  const refreshToken = request.cookies.refresh;
+  let accessToken = request.cookies.access;
+  let refreshToken = request.cookies.refresh;
+
   if (!accessToken && !refreshToken) {
     response.redirect("http://localhost:3001/oauth/spotify/authorize");
     return;
   }
+
   if (!accessToken) {
     const {
       access_token: newAccessToken,
@@ -107,38 +112,62 @@ app.get("/api/user/profile", async (request, response) => {
     response.cookie("access", newAccessToken, {
       maxAge: (expiresIn - 60) * 1000,
     });
+    accessToken = newAccessToken;
+
     if (newRefreshToken) {
       response.cookie("refresh", newRefreshToken);
+      refreshToken = newRefreshToken;
     }
-    const userProfileData = await getCurrentUserProfile(newAccessToken);
-    response.send(userProfileData);
-    return;
   }
+
   try {
     const userProfileData = await getCurrentUserProfile(accessToken);
     response.send(userProfileData);
   } catch (error) {
     console.error(error);
+    response.status(401).send();
   }
+});
+
+app.get("/api/search", async (request, response) => {
+  const { q } = request.query;
+  let appAccessToken = request.cookies.appaccess;
+  if (!appAccessToken) {
+    const {
+      access_token: newAppAccessToken,
+      expires_in: expiresIn,
+    } = await getAppAccessToken();
+    response.cookie("appaccess", newAppAccessToken, {
+      maxAge: (expiresIn - 60) * 1000,
+    });
+    appAccessToken = newAppAccessToken;
+  }
+  const searchResults = await searchEpisode(appAccessToken, q);
+  response.send(searchResults);
 });
 
 app.get("/api/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const accessToken = request.cookies.apptoken;
-  if (!accessToken) {
+  let appAccessToken = request.cookies.appaccess;
+
+  if (!appAccessToken) {
     const {
-      access_token: newAppToken,
+      access_token: newAppAccessToken,
       expires_in: expiresIn,
     } = await getAppAccessToken();
-    response.cookie("apptoken", newAppToken, {
+    response.cookie("appaccess", newAppAccessToken, {
       maxAge: (expiresIn - 60) * 1000,
     });
-    const episodeData = await getEpisodeInfo(newAppToken, id);
-    response.send(episodeData);
-    return;
+    appAccessToken = newAppAccessToken;
   }
-  const episodeData = await getEpisodeInfo(accessToken, id);
-  response.send(episodeData);
+
+  try {
+    const episodeData = await getEpisodeInfo(appAccessToken, id);
+    response.send(episodeData);
+  } catch (error) {
+    console.error(error);
+    response.status(404).send();
+  }
 });
 
 // Serve any static files
