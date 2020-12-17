@@ -46,7 +46,7 @@ app.get("/oauth/spotify/validate", async (request, response) => {
     maxAge: (expiresIn - 60) * 1000,
   });
   response.cookie("refresh", refreshToken);
-  response.redirect("/vote");
+  response.redirect("http://localhost:3000/vote");
 });
 
 app.get("/oauth/spotify/logout", async (request, response) => {
@@ -70,7 +70,7 @@ app.get("/oauth/spotify/refreshtoken", async (request, response) => {
       response.cookie("refresh", newRefreshToken);
     }
   } catch (error) {
-    response.redirect("/oauth/spotify/authorize");
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
     console.error(error);
   }
 });
@@ -94,7 +94,7 @@ app.get("/api/user/profile", async (request, response) => {
   const accessToken = request.cookies.access;
   const refreshToken = request.cookies.refresh;
   if (!accessToken && !refreshToken) {
-    response.redirect("/oauth/spotify/authorize");
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
     return;
   }
   if (!accessToken) {
