@@ -20,6 +20,12 @@ export async function getCurrentUserProfile(token) {
   return userProfileData;
 }
 
+export async function searchEpisode(q) {
+  const response = await fetch(`/api/search?q=${q}`);
+  const searchResults = await response.json();
+  return searchResults.episodes.items;
+}
+
 export async function getEpisodeInfo(id) {
   const response = await fetch(`/api/episode/${id}`);
   const episodeData = response.json();
