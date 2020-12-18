@@ -7,6 +7,7 @@ const querystring = require("querystring");
 const {
   getEpisodeInfo,
   getCurrentUserProfile,
+  searchEpisode,
 } = require("./lib/SpotifyMethods");
 const {
   getAppAccessToken,
@@ -19,7 +20,17 @@ const port = process.env.PORT || 3001;
 
 app.use(cookieParser());
 
-// OAuth Spotify
+// OAuth Spotify API
+
+// Client Credentials Flow
+
+app.get("/oauth/spotify/apptoken", async (request, response) => {
+  const { access_token, expires_in } = await getAppAccessToken();
+  response.cookie("appaccess", access_token, {
+    maxAge: (expires_in - 60) * 1000,
+  });
+  response.status(200).send("App Access Token Cookie is set!");
+});
 
 // Authorization Code Flow
 
@@ -37,15 +48,13 @@ app.get("/oauth/spotify/authorize", (request, response) => {
 
 app.get("/oauth/spotify/validate", async (request, response) => {
   const { code } = request.query;
-  const {
-    access_token: accessToken,
-    expires_in: expiresIn,
-    refresh_token: refreshToken,
-  } = await getUserAccessToken(code);
-  response.cookie("access", accessToken, {
-    maxAge: (expiresIn - 60) * 1000,
+  const { access_token, expires_in, refresh_token } = await getUserAccessToken(
+    code
+  );
+  response.cookie("access", access_token, {
+    maxAge: (expires_in - 60) * 1000,
   });
-  response.cookie("refresh", refreshToken);
+  response.cookie("refresh", refresh_token);
   response.redirect("/vote");
 });
 
@@ -56,89 +65,102 @@ app.get("/oauth/spotify/logout", async (request, response) => {
 });
 
 app.get("/oauth/spotify/refreshtoken", async (request, response) => {
-  const refreshToken = request.cookies.refresh;
+  let refreshToken = request.cookies.refresh;
   try {
     const {
-      access_token: newAccessToken,
-      expires_in: expiresIn,
-      refresh_token: newRefreshToken,
+      access_token,
+      expires_in,
+      refresh_token,
     } = await refreshUserAccessToken(refreshToken);
-    response.cookie("access", newAccessToken, {
-      maxAge: (expiresIn - 60) * 1000,
+
+    response.cookie("access", access_token, {
+      maxAge: (expires_in - 60) * 1000,
     });
-    if (newRefreshToken) {
-      response.cookie("refresh", newRefreshToken);
+
+    if (refresh_token) {
+      response.cookie("refresh", refresh_token);
+      refreshToken = refresh_token;
     }
   } catch (error) {
-    response.redirect("/oauth/spotify/authorize");
     console.error(error);
+    response.redirect("/oauth/spotify/authorize");
   }
 });
 
-// Client Credentials Flow
-
-app.get("/oauth/spotify/apptoken", async (request, response) => {
-  const {
-    access_token: appToken,
-    expires_in: expiresIn,
-  } = await getAppAccessToken();
-  response.cookie("apptoken", appToken, {
-    maxAge: (expiresIn - 60) * 1000,
-  });
-  response.status(200).send("App Token Cookie is set!");
-});
-
-// Spotify API
+// Spotify API Requests
 
 app.get("/api/user/profile", async (request, response) => {
-  const accessToken = request.cookies.access;
-  const refreshToken = request.cookies.refresh;
+  let accessToken = request.cookies.access;
+  let refreshToken = request.cookies.refresh;
+
   if (!accessToken && !refreshToken) {
     response.redirect("/oauth/spotify/authorize");
     return;
   }
+
   if (!accessToken) {
     const {
-      access_token: newAccessToken,
-      expires_in: expiresIn,
-      refresh_token: newRefreshToken,
+      access_token,
+      expires_in,
+      refresh_token,
     } = await refreshUserAccessToken(refreshToken);
 
-    response.cookie("access", newAccessToken, {
-      maxAge: (expiresIn - 60) * 1000,
+    response.cookie("access", access_token, {
+      maxAge: (expires_in - 60) * 1000,
     });
-    if (newRefreshToken) {
-      response.cookie("refresh", newRefreshToken);
+    accessToken = access_token;
+
+    if (refresh_token) {
+      response.cookie("refresh", refresh_token);
+      refreshToken = refresh_token;
     }
-    const userProfileData = await getCurrentUserProfile(newAccessToken);
-    response.send(userProfileData);
-    return;
   }
+
   try {
     const userProfileData = await getCurrentUserProfile(accessToken);
     response.send(userProfileData);
   } catch (error) {
     console.error(error);
+    response.status(401).send();
   }
+});
+
+app.get("/api/search", async (request, response) => {
+  const { q } = request.query;
+  let appAccessToken = request.cookies.appaccess;
+  if (!appAccessToken) {
+    const {
+      access_token: newAppAccessToken,
+      expires_in: expiresIn,
+    } = await getAppAccessToken();
+    response.cookie("appaccess", newAppAccessToken, {
+      maxAge: (expiresIn - 60) * 1000,
+    });
+    appAccessToken = newAppAccessToken;
+  }
+  const searchResults = await searchEpisode(appAccessToken, q);
+  response.send(searchResults);
 });
 
 app.get("/api/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const accessToken = request.cookies.apptoken;
-  if (!accessToken) {
-    const {
-      access_token: newAppToken,
-      expires_in: expiresIn,
-    } = await getAppAccessToken();
-    response.cookie("apptoken", newAppToken, {
-      maxAge: (expiresIn - 60) * 1000,
+  let appAccessToken = request.cookies.appaccess;
+
+  if (!appAccessToken) {
+    const { access_token, expires_in } = await getAppAccessToken();
+    response.cookie("appaccess", access_token, {
+      maxAge: (expires_in - 60) * 1000,
     });
-    const episodeData = await getEpisodeInfo(newAppToken, id);
-    response.send(episodeData);
-    return;
+    appAccessToken = access_token;
   }
-  const episodeData = await getEpisodeInfo(accessToken, id);
-  response.send(episodeData);
+
+  try {
+    const episodeData = await getEpisodeInfo(appAccessToken, id);
+    response.send(episodeData);
+  } catch (error) {
+    console.error(error);
+    response.status(404).send();
+  }
 });
 
 // Serve any static files

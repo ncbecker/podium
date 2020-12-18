@@ -10,7 +10,11 @@ import { EpisodeCard } from "../components/EpisodeCard.js";
 import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 import FilterPage from "./FilterPage.js";
 import { useState } from "react";
-import { getAppAccessToken, getEpisodeInfo } from "../utils/api.js";
+import {
+  getAppAccessToken,
+  searchEpisode,
+  getEpisodeInfo,
+} from "../utils/api.js";
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.js";
 
@@ -109,6 +113,7 @@ function VotingPage() {
   const [open, setOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
   const [fetchData, setFetchData] = useState([]);
+  const [suggestions, setSuggestions] = useState(null);
 
   const { login } = useAuth();
 
@@ -116,11 +121,26 @@ function VotingPage() {
     login();
   }, []);
 
+  useEffect(() => {
+    const doFetch = async () => {
+      if (searchData.length === 0) {
+        setSuggestions(null);
+        return;
+      }
+      const searchResults = await searchEpisode(searchData);
+      setSuggestions(searchResults);
+    };
+    const timeoutId = setTimeout(doFetch, 600);
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchData]);
+
   const handleClickFilter = () => {
     setOpen(!open);
   };
 
-  const handleChangeSearch = (event) => {
+  const handleChangeSearch = async (event) => {
     setSearchData(event.target.value);
   };
 
@@ -145,7 +165,12 @@ function VotingPage() {
       </TopBar>
       <SearchWrapper>
         <FilterButton onClick={handleClickFilter} />
-        <EpisodeSearch value={searchData} onChange={handleChangeSearch} />
+        <EpisodeSearch
+          value={searchData}
+          onChange={handleChangeSearch}
+          suggestions={suggestions}
+          onClick={() => console.log("Episode clicked")}
+        />
         <SearchButton onClick={handleSubmitSearch} />
       </SearchWrapper>
       <FilterPage open={open} onClick={handleClickFilter} />
