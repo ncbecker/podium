@@ -65,10 +65,10 @@ export const EpisodeSearch = ({ value, onChange, suggestions, onClick }) => {
       />
       {suggestions && (
         <SuggestionsContainer>
-          {suggestions?.map((episode) => (
+          {suggestions.map((episode) => (
             <SearchSuggestion key={episode.id} onClick={onClick}>
               <span>{episode.name}</span>
-              <img src={episode.images[2].url} alt={episode.name} />
+              <img src={episode.images[2]?.url} alt={episode.name} />
             </SearchSuggestion>
           ))}
         </SuggestionsContainer>
