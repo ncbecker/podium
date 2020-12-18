@@ -1,3 +1,5 @@
+// OAuth Spotify API
+
 export async function getAppAccessToken() {
   return await fetch("/oauth/spotify/apptoken");
 }
@@ -14,9 +16,11 @@ export async function logoutUser() {
   return await fetch("/oauth/spotify/logout");
 }
 
+// Spotify API
+
 export async function getCurrentUserProfile(token) {
   const response = await fetch("/api/user/profile");
-  const userProfileData = response.json();
+  const userProfileData = await response.json();
   return userProfileData;
 }
 
@@ -28,6 +32,32 @@ export async function searchEpisode(q) {
 
 export async function getEpisodeInfo(id) {
   const response = await fetch(`/api/episode/${id}`);
-  const episodeData = response.json();
+  const episodeData = await response.json();
   return episodeData;
+}
+
+// mongoDB
+
+export async function getSingleUser(id) {
+  const response = await fetch(`/api/db/user/${id}`);
+  const singleUser = await response.json();
+  return singleUser;
+}
+
+export async function getSingleEpisode(id) {
+  const response = await fetch(`/api/db/episode/${id}`);
+  const singleEpisode = await response.json();
+  return singleEpisode;
+}
+
+export async function getAllUsers(id) {
+  const response = await fetch("/api/db/users");
+  const allUsers = await response.json();
+  return allUsers;
+}
+
+export async function getAllEpisodes(id) {
+  const response = await fetch("/api/db/episodes");
+  const allEpisodes = await response.json();
+  return allEpisodes;
 }
