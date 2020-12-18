@@ -16,11 +16,18 @@ const {
   getUserAccessToken,
   refreshUserAccessToken,
 } = require("./lib/SpotifyAccess");
+const {
+  getAllEpisodes,
+  getAllUsers,
+  getSingleEpisode,
+  getSingleUser,
+} = require("./lib/dbMethods");
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(cookieParser());
+app.use(express.json());
 
 // OAuth Spotify API
 
@@ -163,6 +170,30 @@ app.get("/api/episode/:id", async (request, response) => {
     console.error(error);
     response.status(404).send();
   }
+});
+
+// mongoDB Requests
+
+app.get("/api/db/user/:id", async (request, response) => {
+  const { id } = request.params;
+  const singleUser = await getSingleUser(id);
+  response.send(singleUser);
+});
+
+app.get("/api/db/episode/:id", async (request, response) => {
+  const { id } = request.params;
+  const singleEpisode = await getSingleEpisode(id);
+  response.send(singleEpisode);
+});
+
+app.get("/api/db/users", async (request, response) => {
+  const allUsers = await getAllUsers();
+  response.send(allUsers);
+});
+
+app.get("/api/db/episodes", async (request, response) => {
+  const allEpisodes = await getAllEpisodes();
+  response.send(allEpisodes);
 });
 
 // Serve any static files
