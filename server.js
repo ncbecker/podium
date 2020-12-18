@@ -4,6 +4,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const querystring = require("querystring");
 
+const { connectDb } = require("./lib/database");
+
 const {
   getEpisodeInfo,
   getCurrentUserProfile,
@@ -55,7 +57,7 @@ app.get("/oauth/spotify/validate", async (request, response) => {
     maxAge: (expires_in - 60) * 1000,
   });
   response.cookie("refresh", refresh_token);
-  response.redirect("/vote");
+  response.redirect("http://localhost:3000/vote");
 });
 
 app.get("/oauth/spotify/logout", async (request, response) => {
@@ -83,7 +85,7 @@ app.get("/oauth/spotify/refreshtoken", async (request, response) => {
     }
   } catch (error) {
     console.error(error);
-    response.redirect("/oauth/spotify/authorize");
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
   }
 });
 
@@ -94,7 +96,7 @@ app.get("/api/user/profile", async (request, response) => {
   let refreshToken = request.cookies.refresh;
 
   if (!accessToken && !refreshToken) {
-    response.redirect("/oauth/spotify/authorize");
+    response.redirect("http://localhost:3001/oauth/spotify/authorize");
     return;
   }
 
@@ -175,6 +177,17 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
-app.listen(port, () => {
-  console.log(`Podium server listening at http://localhost:${port}`);
-});
+async function run() {
+  try {
+    console.log("Connecting to mongoDB...");
+    await connectDb(process.env.MONGO_DB_URL, process.env.MONGO_DB_NAME);
+    console.log("Successfully connected!");
+
+    app.listen(port, () => {
+      console.log(`Podium server listening at http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+run();
