@@ -20,6 +20,7 @@ const LogoWrapper = styled.div`
   grid-row: 3 / 4;
   place-self: center;
 `;
+
 const ButtonWrapper = styled.div`
   grid-row: 4 / 5;
   place-self: center;
@@ -35,7 +36,9 @@ function LogInPage() {
         <Logo />
       </LogoWrapper>
       <ButtonWrapper>
-        <LogInButton />
+        <a href="/oauth/spotify/authorize">
+          <LogInButton />
+        </a>
         <SkipLogIn />
       </ButtonWrapper>
     </PageWrapper>

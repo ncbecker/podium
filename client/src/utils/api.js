@@ -1,15 +1,33 @@
 export async function getAppAccessToken() {
-  const response = await fetch("/oauth/apptoken");
-  const data = await response.json();
-  return data.access_token;
+  return await fetch("/oauth/spotify/apptoken");
 }
 
-export async function getEpisodeInfo(token, id) {
-  const response = await fetch(`/api/episode/${id}`, {
-    headers: {
-      Authorization: token,
-    },
-  });
+export async function getUserAccessToken(authCode) {
+  return await fetch("/oauth/spotify/usertoken");
+}
+
+export async function refreshUserAccessToken(refreshToken) {
+  return await fetch("/oauth/spotify/refreshtoken");
+}
+
+export async function logoutUser() {
+  return await fetch("/oauth/spotify/logout");
+}
+
+export async function getCurrentUserProfile(token) {
+  const response = await fetch("/api/user/profile");
+  const userProfileData = response.json();
+  return userProfileData;
+}
+
+export async function searchEpisode(q) {
+  const response = await fetch(`/api/search?q=${q}`);
+  const searchResults = await response.json();
+  return searchResults.episodes.items;
+}
+
+export async function getEpisodeInfo(id) {
+  const response = await fetch(`/api/episode/${id}`);
   const episodeData = response.json();
   return episodeData;
 }

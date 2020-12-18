@@ -70,17 +70,9 @@ export const ArrowBackButton = ({ ...props }) => {
   );
 };
 
-export const LogOutButton = ({ ...props }) => {
-  const history = useHistory();
-
+export const LogOutButton = ({ onClick, ...props }) => {
   return (
-    <IconButton
-      nav
-      onClick={() => {
-        history.push("/login");
-      }}
-      {...props}
-    >
+    <IconButton nav onClick={onClick} {...props}>
       <LogOut />
     </IconButton>
   );
@@ -98,9 +90,9 @@ export const FilterButton = ({ onClick }) => {
 
 export const SearchButton = ({ onClick }) => {
   return (
-      <IconButton onClick={onClick}>
-        <Search />
-      </IconButton>
+    <IconButton onClick={onClick}>
+      <Search />
+    </IconButton>
   );
 };
 
@@ -138,5 +130,9 @@ SearchButton.propTypes = {
 };
 
 CloseButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+LogOutButton.propTypes = {
   onClick: PropTypes.func,
 };
