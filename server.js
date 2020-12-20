@@ -21,6 +21,14 @@ const {
   getAllUsers,
   getSingleEpisode,
   getSingleUser,
+  setUser,
+  getAllLikedEpisodes,
+  setEpisode,
+  updateEpisodeLiked,
+  updateEpisodeUnliked,
+  deleteManyEpisodes,
+  deleteEpisode,
+  updateUserDisplayName,
 } = require("./lib/dbMethods");
 
 const app = express();
@@ -174,26 +182,165 @@ app.get("/api/episode/:id", async (request, response) => {
 
 // mongoDB Requests
 
+// Users
+
+app.post("/api/db/user/:id", async (request, response) => {
+  const { id } = request.params;
+  const { name } = request.body;
+  try {
+    await setUser(id, name);
+    response.status(200).send("User is set in database.");
+  } catch (error) {
+    console.error(error);
+    if (error.code === 11000) {
+      response.status(409).send("Duplicate ID");
+    }
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
 app.get("/api/db/user/:id", async (request, response) => {
   const { id } = request.params;
-  const singleUser = await getSingleUser(id);
-  response.send(singleUser);
+  try {
+    const singleUser = await getSingleUser(id);
+    response.send(singleUser);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+app.patch("/api/db/user/:id", async (request, response) => {
+  const { id } = request.params;
+  const { name } = request.body;
+  try {
+    const updatedUser = await updateUserDisplayName(id, name);
+    response.send(updatedUser);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+app.get("/api/db/users", async (request, response) => {
+  try {
+    const allUsers = await getAllUsers();
+    response.send(allUsers);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+// Episodes
+
+app.post("/api/db/episode/:id", async (request, response) => {
+  const { id } = request.params;
+  const { userID } = request.body;
+  try {
+    await setEpisode(id, userID);
+    response.status(200).send("Episode is set in database.");
+  } catch (error) {
+    console.error(error);
+    if (error.code === 11000) {
+      response.status(409).send("Duplicate ID");
+    }
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
 });
 
 app.get("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const singleEpisode = await getSingleEpisode(id);
-  response.send(singleEpisode);
+  try {
+    const singleEpisode = await getSingleEpisode(id);
+    response.send(singleEpisode);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
 });
 
-app.get("/api/db/users", async (request, response) => {
-  const allUsers = await getAllUsers();
-  response.send(allUsers);
+app.patch("/api/db/episode/:id", async (request, response) => {
+  const { id } = request.params;
+  const { userID, liked } = request.body;
+  try {
+    if (liked) {
+      await updateEpisodeLiked(id, userID);
+    } else {
+      await updateEpisodeUnliked(id, userID);
+    }
+    response.status(200).send("Database updated.");
+  } catch (error) {
+    console.error(error);
+    if (error.code === 11000) {
+      response.status(409).send("Duplicate ID");
+    }
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+app.delete("/api/db/episode/:id", async (request, response) => {
+  const { id } = request.params;
+  try {
+    const deletedEpisode = await deleteEpisode(id);
+    response.send(deletedEpisode);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
 });
 
 app.get("/api/db/episodes", async (request, response) => {
-  const allEpisodes = await getAllEpisodes();
-  response.send(allEpisodes);
+  try {
+    const allEpisodes = await getAllEpisodes();
+    response.send(allEpisodes);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+app.get("/api/db/episodes/:id", async (request, response) => {
+  const { id } = request.params;
+  try {
+    const allLikedEpisodes = await getAllLikedEpisodes(id);
+    response.send(allLikedEpisodes);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+app.delete("/api/db/episodes", async (request, response) => {
+  try {
+    const deletedEpisodes = await deleteManyEpisodes();
+    response.send(deletedEpisodes);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
 });
 
 // Serve any static files
