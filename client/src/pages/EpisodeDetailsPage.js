@@ -1,5 +1,8 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
+import { useAuth } from "../contexts/AuthContext.js";
 import {
   AddToSpotifyButton,
   ArrowBackButton,
@@ -7,6 +10,7 @@ import {
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
+import { getEpisodeDetailsFromDB } from "../utils/api.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -108,23 +112,24 @@ const NotLikedSmall = styled(NotLiked)`
   display: block;
 `;
 
-function EpisodeDetailsPage({
-  imgsrc,
-  imgalt,
-  title,
-  show,
-  description,
-  date,
-  duration,
-  likes,
-  onClick,
-  userLiked,
-}) {
-  const calcDuration = (duration) => {
-    return Math.round(duration / 60000);
-  };
+function EpisodeDetailsPage() {
+  const { id } = useParams();
+  const { user } = useAuth();
+  const [episodeDetails, setEpisodeDetails] = useState(null);
 
-  const durationInMin = calcDuration(duration);
+  useEffect(() => {
+    const doFetch = async () => {
+      const details = await getEpisodeDetailsFromDB(id, user.id);
+      setEpisodeDetails(details);
+    };
+    if (id && user.id) {
+      doFetch();
+    }
+  }, [id, user.id]);
+
+  const handleClickLike = async () => {
+    console.log("LIKE");
+  };
 
   return (
     <PageWrapper>
@@ -134,21 +139,36 @@ function EpisodeDetailsPage({
           <Logo />
         </LogoContainer>
       </TopBar>
-      <TitleWrapper>
-        <img src={imgsrc} alt={imgalt} />
-        <span>{title}</span>
-      </TitleWrapper>
-      <ShowTitle>{show}</ShowTitle>
-      <Description>{description}</Description>
-      <Stats>
-        {date + " | " + durationInMin + " Min. | " + likes + " Likes"}
-      </Stats>
-      <ButtonWrapper>
-        <AddToSpotifyButton />
-        <button onClick={onClick}>
-          {userLiked ? <LikedSmall /> : <NotLikedSmall />}
-        </button>
-      </ButtonWrapper>
+      {episodeDetails && (
+        <>
+          <TitleWrapper>
+            <img
+              src={episodeDetails.images[1]?.url}
+              alt={episodeDetails.name}
+            />
+            <span>{episodeDetails.name}</span>
+          </TitleWrapper>
+          <ShowTitle>{episodeDetails.show.name}</ShowTitle>
+          <Description>{episodeDetails.description}</Description>
+          <Stats>
+            {episodeDetails.release_date +
+              " | " +
+              episodeDetails.duration_min +
+              " Min. | " +
+              episodeDetails.likes +
+              " Likes"}
+          </Stats>
+          <ButtonWrapper>
+            <AddToSpotifyButton
+              as="a"
+              href={episodeDetails.external_urls.spotify}
+            />
+            <button onClick={handleClickLike}>
+              {episodeDetails.liked ? <LikedSmall /> : <NotLikedSmall />}
+            </button>
+          </ButtonWrapper>
+        </>
+      )}
     </PageWrapper>
   );
 }
@@ -163,7 +183,7 @@ EpisodeDetailsPage.propTypes = {
   description: PropTypes.string,
   date: PropTypes.string,
   duration: PropTypes.number,
+  liked: PropTypes.bool,
   likes: PropTypes.number,
   onClick: PropTypes.func,
-  userLiked: PropTypes.bool,
 };
