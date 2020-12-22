@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components/macro";
+import { useAuth } from "../contexts/AuthContext.js";
 import {
   BurgerMenuButton,
   FilterButton,
@@ -7,16 +9,8 @@ import {
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { EpisodeSearch } from "../components/EpisodeSearch.js";
 import { EpisodeCard } from "../components/EpisodeCard.js";
-import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 import FilterPage from "./FilterPage.js";
-import { useState } from "react";
-import {
-  getAppAccessToken,
-  searchEpisode,
-  getEpisodeInfo,
-} from "../utils/api.js";
-import { useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext.js";
+import { searchEpisode, getAllEpisodesAndLikes } from "../utils/api.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -64,62 +58,27 @@ const CardsWrapper = styled.div`
   justify-self: center;
 `;
 
-export const placeholderInfoArray = [
-  {
-    episodeId: 1,
-    imgsrc: Placeholder,
-    imgalt: "Placeholder",
-    title:
-      "Sehnsucht nach New York / Fernsehabend mit Jan und Olli Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
-    show:
-      "Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig Fest & Flauschig",
-    description:
-      "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
-    date: "3. Okt.",
-    duration: 4139102,
-    userLiked: false,
-    likes: 12,
-  },
-  {
-    episodeId: 2,
-    imgsrc: Placeholder,
-    imgalt: "Placeholder",
-    title: "Short title",
-    show: "Fest & Flauschig",
-    description:
-      "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
-    date: "3. Okt.",
-    duration: 4139102,
-    userLiked: true,
-    likes: 15,
-  },
-  {
-    episodeId: 3,
-    imgsrc: Placeholder,
-    imgalt: "Placeholder",
-    title:
-      "Sehnsucht nach New York / Fernsehabend mit Jan und Olli und Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
-    show: "Fest & Flauschig",
-    description:
-      "Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!Füße hoch und Chips bereithalten, Jan und Olli kommentieren quasi live die Verleihung vom Deutschen Comedypreis. Sie telefonieren in einer Werbepause mit der großartigen Katrin Bauerfeind (die direkt danach wieder auf die Bühne muss) und nebenbei erfahren wir, dass eine bekannte Politikerin im selben Krankenhaus geboren wurde wie Olli Schulz!",
-    date: "3. Okt.",
-    duration: 4139102,
-    userLiked: false,
-    likes: 0,
-  },
-];
-
 function VotingPage() {
   const [open, setOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
   const [fetchData, setFetchData] = useState([]);
   const [suggestions, setSuggestions] = useState(null);
 
-  const { login } = useAuth();
+  const { user, login } = useAuth();
 
   useEffect(() => {
-    login();
-  }, []);
+    const doLogin = async () => {
+      await login();
+    };
+    const doFetch = async () => {
+      const allEpisodesAndLikes = await getAllEpisodesAndLikes(user.id);
+      setFetchData(allEpisodesAndLikes);
+    };
+    doLogin();
+    if (user) {
+      doFetch();
+    }
+  }, [login, user]);
 
   useEffect(() => {
     const doFetch = async () => {
@@ -146,12 +105,6 @@ function VotingPage() {
 
   const handleSubmitSearch = async (event) => {
     event.preventDefault();
-    await getAppAccessToken();
-    const episodeData = await getEpisodeInfo(searchData);
-    setFetchData([
-      ...fetchData,
-      { ...episodeData, userLiked: false, likes: 0 },
-    ]);
     setSearchData("");
   };
 
@@ -169,7 +122,6 @@ function VotingPage() {
           value={searchData}
           onChange={handleChangeSearch}
           suggestions={suggestions}
-          onClick={() => console.log("Episode clicked")}
         />
         <SearchButton onClick={handleSubmitSearch} />
       </SearchWrapper>
@@ -178,10 +130,11 @@ function VotingPage() {
         {fetchData?.map((episodeInfo) => (
           <EpisodeCard
             key={episodeInfo.id}
-            imgsrc={episodeInfo.images[1].url}
+            episodeId={episodeInfo.id}
+            imgsrc={episodeInfo.images[1]?.url}
             imgalt={episodeInfo.show.name}
             title={episodeInfo.name}
-            userLiked={episodeInfo.userLiked}
+            liked={episodeInfo.liked}
             likes={episodeInfo.likes}
           />
         ))}
