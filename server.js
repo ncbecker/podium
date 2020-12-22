@@ -10,6 +10,7 @@ const {
   getEpisodeInfo,
   getCurrentUserProfile,
   searchEpisode,
+  getManyEpisodeInfos,
 } = require("./lib/SpotifyMethods");
 const {
   getAppAccessToken,
@@ -180,6 +181,30 @@ app.get("/api/episode/:id", async (request, response) => {
   }
 });
 
+app.get("/api/episodes", async (request, response) => {
+  const { q } = request.query;
+  let appAccessToken = request.cookies.appaccess;
+  try {
+    if (!appAccessToken) {
+      const {
+        access_token: newAppAccessToken,
+        expires_in: expiresIn,
+      } = await getAppAccessToken();
+      response.cookie("appaccess", newAppAccessToken, {
+        maxAge: (expiresIn - 60) * 1000,
+      });
+      appAccessToken = newAppAccessToken;
+    }
+    const episodeInfos = await getManyEpisodeInfos(appAccessToken, q);
+    response.send(episodeInfos);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
 // mongoDB Requests
 
 // Users
@@ -188,6 +213,16 @@ app.post("/api/db/user/:id", async (request, response) => {
   const { id } = request.params;
   const { name } = request.body;
   try {
+    const user = await getSingleUser(id);
+    if (user && user.name === name) {
+      response.status(200).send("User already exists.");
+      return;
+    }
+    if (user && user.name !== name) {
+      await updateUserDisplayName(id, name);
+      response.status(200).send("Spotify user name got updated.");
+      return;
+    }
     await setUser(id, name);
     response.status(200).send("User is set in database.");
   } catch (error) {
@@ -244,9 +279,9 @@ app.get("/api/db/users", async (request, response) => {
 
 app.post("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const { userID } = request.body;
+  const { userId } = request.body;
   try {
-    await setEpisode(id, userID);
+    await setEpisode(id, userId);
     response.status(200).send("Episode is set in database.");
   } catch (error) {
     console.error(error);
@@ -272,14 +307,56 @@ app.get("/api/db/episode/:id", async (request, response) => {
   }
 });
 
+app.get("/api/episode-details/:id", async (request, response) => {
+  const { id } = request.params;
+  const userId = request.headers.authorization;
+
+  let appAccessToken = request.cookies.appaccess;
+  try {
+    if (!appAccessToken) {
+      const {
+        access_token: newAppAccessToken,
+        expires_in: expiresIn,
+      } = await getAppAccessToken();
+      response.cookie("appaccess", newAppAccessToken, {
+        maxAge: (expiresIn - 60) * 1000,
+      });
+      appAccessToken = newAppAccessToken;
+    }
+
+    const episodeInDB = await getSingleEpisode(id);
+    const episodeInfo = await getEpisodeInfo(appAccessToken, id);
+    if (episodeInDB) {
+      response.status(200).send({
+        ...episodeInfo,
+        duration_min: Math.round(episodeInfo.duration_ms / 60000),
+        liked: episodeInDB.users.includes(userId),
+        likes: episodeInDB.likes,
+      });
+    } else {
+      response.status(200).send({
+        ...episodeInfo,
+        duration_min: Math.round(episodeInfo.duration_ms / 60000),
+        liked: false,
+        likes: 0,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
 app.patch("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const { userID, liked } = request.body;
+  const { userId, liked } = request.body;
   try {
     if (liked) {
-      await updateEpisodeLiked(id, userID);
+      await updateEpisodeLiked(id, userId);
     } else {
-      await updateEpisodeUnliked(id, userID);
+      await updateEpisodeUnliked(id, userId);
     }
     response.status(200).send("Database updated.");
   } catch (error) {
@@ -323,6 +400,38 @@ app.get("/api/db/episodes/:id", async (request, response) => {
   try {
     const allLikedEpisodes = await getAllLikedEpisodes(id);
     response.send(allLikedEpisodes);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
+app.get("/api/episodes-likes/:id", async (request, response) => {
+  const { id } = request.params;
+  let appAccessToken = request.cookies.appaccess;
+  try {
+    if (!appAccessToken) {
+      const {
+        access_token: newAppAccessToken,
+        expires_in: expiresIn,
+      } = await getAppAccessToken();
+      response.cookie("appaccess", newAppAccessToken, {
+        maxAge: (expiresIn - 60) * 1000,
+      });
+      appAccessToken = newAppAccessToken;
+    }
+    await deleteManyEpisodes();
+    const allEpisodes = await getAllEpisodes();
+    const q = allEpisodes.map((item) => item._id).toString();
+    const episodeInfos = await getManyEpisodeInfos(appAccessToken, q);
+    const allEpisodesAndLikes = allEpisodes.map((data) => ({
+      ...data,
+      liked: data.users.includes(id),
+      ...episodeInfos.episodes.find((episode) => episode.id === data._id),
+    }));
+    response.send(allEpisodesAndLikes);
   } catch (error) {
     console.error(error);
     response

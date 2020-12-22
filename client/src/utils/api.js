@@ -36,28 +36,86 @@ export async function getEpisodeInfo(id) {
   return episodeData;
 }
 
+export async function getManyEpisodeInfos(q) {
+  const response = await fetch(`/api/episodes?q=${q}`);
+  const episodeInfos = await response.json();
+  return episodeInfos;
+}
+
 // mongoDB
 
-export async function getSingleUser(id) {
+export async function setUserInDB(id, name) {
+  await fetch(`/api/db/user/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({ name }),
+  });
+}
+
+export async function getSingleUserFromDB(id) {
   const response = await fetch(`/api/db/user/${id}`);
   const singleUser = await response.json();
   return singleUser;
 }
 
-export async function getSingleEpisode(id) {
-  const response = await fetch(`/api/db/episode/${id}`);
-  const singleEpisode = await response.json();
-  return singleEpisode;
+export async function updateUserDisplayNameInDB(id, name) {
+  await fetch(`/api/db/user/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({ name }),
+  });
 }
 
-export async function getAllUsers(id) {
+export async function getAllUsersFromDB() {
   const response = await fetch("/api/db/users");
   const allUsers = await response.json();
   return allUsers;
 }
 
-export async function getAllEpisodes(id) {
+export async function getSingleEpisodeFromDB(id) {
+  const response = await fetch(`/api/db/episode/${id}`);
+  const singleEpisode = await response.json();
+  return singleEpisode;
+}
+
+export async function updateEpisodeLikeInDB(id, userId, liked) {
+  await fetch(`/api/db/episode/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({ userId, liked }),
+  });
+}
+
+export async function getAllEpisodesFromDB() {
   const response = await fetch("/api/db/episodes");
   const allEpisodes = await response.json();
   return allEpisodes;
+}
+
+export async function getAllLikedEpisodesFromDB(id) {
+  const response = await fetch(`/api/db/episodes/${id}`);
+  const allLikedEpisodes = await response.json();
+  return allLikedEpisodes;
+}
+
+export async function getAllEpisodesAndLikes(id) {
+  const response = await fetch(`/api/episodes-likes/${id}`);
+  const allEpisodesAndLikes = await response.json();
+  return allEpisodesAndLikes;
+}
+
+export async function getEpisodeDetailsFromDB(id, userId) {
+  const response = await fetch(`/api/episode-details/${id}`, {
+    headers: {
+      Authorization: userId,
+    },
+  });
+  const episodeDetails = await response.json();
+  return episodeDetails;
 }
