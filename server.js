@@ -136,7 +136,7 @@ app.get("/api/user/profile", async (request, response) => {
 
   try {
     const userProfileData = await getCurrentUserProfile(accessToken);
-    response.send(userProfileData);
+    response.status(200).send(userProfileData);
   } catch (error) {
     console.error(error);
     response.status(401).send();
@@ -157,7 +157,7 @@ app.get("/api/search", async (request, response) => {
     appAccessToken = newAppAccessToken;
   }
   const searchResults = await searchEpisode(appAccessToken, q);
-  response.send(searchResults);
+  response.status(200).send(searchResults);
 });
 
 app.get("/api/episode/:id", async (request, response) => {
@@ -174,7 +174,7 @@ app.get("/api/episode/:id", async (request, response) => {
 
   try {
     const episodeData = await getEpisodeInfo(appAccessToken, id);
-    response.send(episodeData);
+    response.status(200).send(episodeData);
   } catch (error) {
     console.error(error);
     response.status(404).send();
@@ -196,7 +196,7 @@ app.get("/api/episodes", async (request, response) => {
       appAccessToken = newAppAccessToken;
     }
     const episodeInfos = await getManyEpisodeInfos(appAccessToken, q);
-    response.send(episodeInfos);
+    response.status(200).send(episodeInfos);
   } catch (error) {
     console.error(error);
     response
@@ -240,7 +240,7 @@ app.get("/api/db/user/:id", async (request, response) => {
   const { id } = request.params;
   try {
     const singleUser = await getSingleUser(id);
-    response.send(singleUser);
+    response.status(200).send(singleUser);
   } catch (error) {
     console.error(error);
     response
@@ -254,7 +254,7 @@ app.patch("/api/db/user/:id", async (request, response) => {
   const { name } = request.body;
   try {
     const updatedUser = await updateUserDisplayName(id, name);
-    response.send(updatedUser);
+    response.status(200).send(updatedUser);
   } catch (error) {
     console.error(error);
     response
@@ -266,7 +266,7 @@ app.patch("/api/db/user/:id", async (request, response) => {
 app.get("/api/db/users", async (request, response) => {
   try {
     const allUsers = await getAllUsers();
-    response.send(allUsers);
+    response.status(200).send(allUsers);
   } catch (error) {
     console.error(error);
     response
@@ -298,7 +298,7 @@ app.get("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
   try {
     const singleEpisode = await getSingleEpisode(id);
-    response.send(singleEpisode);
+    response.status(200).send(singleEpisode);
   } catch (error) {
     console.error(error);
     response
@@ -374,7 +374,7 @@ app.delete("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
   try {
     const deletedEpisode = await deleteEpisode(id);
-    response.send(deletedEpisode);
+    response.status(200).send(deletedEpisode);
   } catch (error) {
     console.error(error);
     response
@@ -386,7 +386,7 @@ app.delete("/api/db/episode/:id", async (request, response) => {
 app.get("/api/db/episodes", async (request, response) => {
   try {
     const allEpisodes = await getAllEpisodes();
-    response.send(allEpisodes);
+    response.status(200).send(allEpisodes);
   } catch (error) {
     console.error(error);
     response
@@ -399,7 +399,7 @@ app.get("/api/db/episodes/:id", async (request, response) => {
   const { id } = request.params;
   try {
     const allLikedEpisodes = await getAllLikedEpisodes(id);
-    response.send(allLikedEpisodes);
+    response.status(200).send(allLikedEpisodes);
   } catch (error) {
     console.error(error);
     response
@@ -431,7 +431,7 @@ app.get("/api/episodes-likes/:id", async (request, response) => {
       liked: data.users.includes(id),
       ...episodeInfos.episodes.find((episode) => episode.id === data._id),
     }));
-    response.send(allEpisodesAndLikes);
+    response.status(200).send(allEpisodesAndLikes);
   } catch (error) {
     console.error(error);
     response
@@ -443,7 +443,7 @@ app.get("/api/episodes-likes/:id", async (request, response) => {
 app.delete("/api/db/episodes", async (request, response) => {
   try {
     const deletedEpisodes = await deleteManyEpisodes();
-    response.send(deletedEpisodes);
+    response.status(200).send(deletedEpisodes);
   } catch (error) {
     console.error(error);
     response
