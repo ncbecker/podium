@@ -16,6 +16,9 @@ const PageWrapper = styled.div`
   width: 100%;
   height: 100vh;
   overflow-x: hidden;
+  ::-webkit-scrollbar {
+    width: 0;
+  }
   display: grid;
   grid-template-rows: auto auto 1fr;
 `;
