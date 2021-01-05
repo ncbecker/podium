@@ -10,7 +10,10 @@ import {
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
-import { getEpisodeDetailsFromDB } from "../utils/api.js";
+import {
+  getEpisodeDetailsFromDB,
+  updateEpisodeLikeInDB,
+} from "../utils/api.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -116,6 +119,8 @@ function EpisodeDetailsPage() {
   const { id } = useParams();
   const { user } = useAuth();
   const [episodeDetails, setEpisodeDetails] = useState(null);
+  const [isLiked, setIsLiked] = useState(null);
+  const [likeCount, setLikeCount] = useState(null);
 
   useEffect(() => {
     const doFetch = async () => {
@@ -127,8 +132,22 @@ function EpisodeDetailsPage() {
     }
   }, [id, user.id]);
 
+  useEffect(() => {
+    if (episodeDetails) {
+      setIsLiked(episodeDetails.liked);
+      setLikeCount(episodeDetails.likes);
+    }
+  }, [episodeDetails]);
+
   const handleClickLike = async () => {
-    console.log("LIKE");
+    if (isLiked) {
+      setIsLiked(!isLiked);
+      setLikeCount(likeCount - 1);
+    } else {
+      setIsLiked(!isLiked);
+      setLikeCount(likeCount + 1);
+    }
+    await updateEpisodeLikeInDB(id, user.id, !isLiked);
   };
 
   return (
@@ -155,16 +174,18 @@ function EpisodeDetailsPage() {
               " | " +
               episodeDetails.duration_min +
               " Min. | " +
-              episodeDetails.likes +
+              likeCount +
               " Likes"}
           </Stats>
           <ButtonWrapper>
             <AddToSpotifyButton
               as="a"
               href={episodeDetails.external_urls.spotify}
+              target="_blank"
+              rel="noopener noreferrer"
             />
             <button onClick={handleClickLike}>
-              {episodeDetails.liked ? <LikedSmall /> : <NotLikedSmall />}
+              {isLiked ? <LikedSmall /> : <NotLikedSmall />}
             </button>
           </ButtonWrapper>
         </>
