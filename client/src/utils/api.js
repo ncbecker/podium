@@ -92,22 +92,16 @@ export async function updateEpisodeLikeInDB(id, userId, liked) {
   });
 }
 
-export async function getAllEpisodesFromDB() {
-  const response = await fetch("/api/db/episodes");
-  const allEpisodes = await response.json();
-  return allEpisodes;
-}
-
-export async function getAllLikedEpisodesFromDB(id) {
-  const response = await fetch(`/api/db/episodes/${id}`);
-  const allLikedEpisodes = await response.json();
-  return allLikedEpisodes;
-}
-
 export async function getAllEpisodesAndLikes(id) {
   const response = await fetch(`/api/episodes-likes/${id}`);
   const allEpisodesAndLikes = await response.json();
   return allEpisodesAndLikes;
+}
+
+export async function getAllLikedEpisodes(id) {
+  const response = await fetch(`/api/episodes-user/${id}`);
+  const allLikedEpisodes = await response.json();
+  return allLikedEpisodes;
 }
 
 export async function getEpisodeDetailsFromDB(id, userId) {
