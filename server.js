@@ -440,6 +440,37 @@ app.get("/api/episodes-likes/:id", async (request, response) => {
   }
 });
 
+app.get("/api/episodes-user/:id", async (request, response) => {
+  const { id } = request.params;
+  let appAccessToken = request.cookies.appaccess;
+  try {
+    if (!appAccessToken) {
+      const {
+        access_token: newAppAccessToken,
+        expires_in: expiresIn,
+      } = await getAppAccessToken();
+      response.cookie("appaccess", newAppAccessToken, {
+        maxAge: (expiresIn - 60) * 1000,
+      });
+      appAccessToken = newAppAccessToken;
+    }
+    const allLikedEpisodes = await getAllLikedEpisodes(id);
+    const q = allLikedEpisodes.map((item) => item._id).toString();
+    const episodeInfos = await getManyEpisodeInfos(appAccessToken, q);
+    const allLikedEpisodeInfos = allLikedEpisodes.map((data) => ({
+      ...data,
+      liked: data.users.includes(id),
+      ...episodeInfos.episodes.find((episode) => episode.id === data._id),
+    }));
+    response.status(200).send(allLikedEpisodeInfos);
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .send("An unexpected error occured. Please try again later!");
+  }
+});
+
 app.delete("/api/db/episodes", async (request, response) => {
   try {
     const deletedEpisodes = await deleteManyEpisodes();
