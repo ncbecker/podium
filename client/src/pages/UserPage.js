@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import { ArrowBackButton, LogOutButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { EpisodeCard } from "../components/EpisodeCard.js";
-import Placeholder from "../assets/placeholder-episode-pic.jpeg";
 import { useAuth } from "../contexts/AuthContext.js";
+import { getAllLikedEpisodes } from "../utils/api.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -64,19 +65,19 @@ const CardsWrapper = styled.div`
   justify-self: center;
 `;
 
-const placeholderInfoArray = [
-  {
-    episodeId: 1,
-    imgsrc: Placeholder,
-    imgalt: "Placeholder",
-    title: "Sehnsucht nach New York / Fernsehabend mit Jan und Olli",
-    userLiked: true,
-    likes: 1,
-  },
-];
-
 function UserPage() {
+  const [fetchData, setFetchData] = useState([]);
+
   const { user, logout } = useAuth();
+
+  useEffect(() => {
+    const doFetch = async () => {
+      const allLikedEpisodes = await getAllLikedEpisodes(user.id);
+      setFetchData(allLikedEpisodes);
+    };
+
+    doFetch();
+  }, [user.id]);
 
   return (
     <PageWrapper>
@@ -90,14 +91,15 @@ function UserPage() {
       <WelcomeWrapper>Welcome {user.display_name} 👋</WelcomeWrapper>
       <TitleWrapper>Your favorites</TitleWrapper>
       <CardsWrapper>
-        {placeholderInfoArray.map((placeholderInfo) => (
+        {fetchData?.map((episodeInfo) => (
           <EpisodeCard
-            key={placeholderInfo.episodeId.toString()}
-            imgsrc={placeholderInfo.imgsrc}
-            imgalt={placeholderInfo.imgalt}
-            title={placeholderInfo.title}
-            userLiked={placeholderInfo.userLiked}
-            likes={placeholderInfo.likes}
+            key={episodeInfo.id}
+            episodeId={episodeInfo.id}
+            imgsrc={episodeInfo.images[1]?.url}
+            imgalt={episodeInfo.show.name}
+            title={episodeInfo.name}
+            liked={episodeInfo.liked}
+            likes={episodeInfo.likes}
           />
         ))}
       </CardsWrapper>
