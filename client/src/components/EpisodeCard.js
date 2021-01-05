@@ -6,6 +6,8 @@ import Lottie from "react-lottie";
 import animationData from "../assets/lotties/heart-burst.json";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
+import { updateEpisodeLikeInDB } from "../utils/api";
+import { useAuth } from "../contexts/AuthContext";
 
 const Card = styled.div`
   width: 320px;
@@ -62,11 +64,19 @@ const LottieContainer = styled.div`
   pointer-events: none;
 `;
 
-export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
-  const [isLiked, setIsLiked] = useState(userLiked);
+export const EpisodeCard = ({
+  episodeId,
+  imgsrc,
+  imgalt,
+  title,
+  liked,
+  likes,
+}) => {
+  const [isLiked, setIsLiked] = useState(liked);
   const [playLottie, setPlayLottie] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const history = useHistory();
+  const { user } = useAuth();
 
   const defaultOptions = {
     loop: false,
@@ -77,7 +87,7 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
     },
   };
 
-  const handleClickLike = () => {
+  const handleClickLike = async () => {
     if (isLiked) {
       setIsLiked(!isLiked);
       setLikeCount(likeCount - 1);
@@ -86,17 +96,18 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
       setPlayLottie(!playLottie);
       setLikeCount(likeCount + 1);
     }
+    await updateEpisodeLikeInDB(episodeId, user.id, !isLiked);
   };
 
   return (
     <Card>
       <EpisodeInfos
         onClick={() => {
-          history.push("/details");
+          history.push(`/details/${episodeId}`);
         }}
       >
         <img src={imgsrc} alt={imgalt} />
-        <span>{title}</span>
+        <span title={title}>{title}</span>
       </EpisodeInfos>
       <LikeContainer>
         <LikeButton onClick={handleClickLike}>
@@ -117,9 +128,10 @@ export const EpisodeCard = ({ imgsrc, imgalt, title, userLiked, likes }) => {
 };
 
 EpisodeCard.propTypes = {
+  episodeId: PropTypes.string,
   imgsrc: PropTypes.string,
   imgalt: PropTypes.string,
   title: PropTypes.string,
-  userLiked: PropTypes.bool,
+  liked: PropTypes.bool,
   likes: PropTypes.number,
 };

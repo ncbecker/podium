@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { getCurrentUserProfile, logoutUser } from "../utils/api";
+import { getCurrentUserProfile, logoutUser, setUserInDB } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -15,6 +15,7 @@ export function AuthProvider({ children }) {
     }
     const userProfile = await getCurrentUserProfile();
     setUser(userProfile);
+    await setUserInDB(userProfile.id, userProfile.display_name);
   };
 
   const logout = async () => {

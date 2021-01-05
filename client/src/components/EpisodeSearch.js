@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 
 const InputField = styled.input`
   width: 250px;
@@ -25,6 +26,7 @@ const SuggestionsContainer = styled.div`
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  z-index: 1;
 `;
 
 const SearchSuggestion = styled.div`
@@ -52,7 +54,9 @@ const SearchSuggestion = styled.div`
   }
 `;
 
-export const EpisodeSearch = ({ value, onChange, suggestions, onClick }) => {
+export const EpisodeSearch = ({ value, onChange, suggestions }) => {
+  const history = useHistory();
+
   return (
     <Container>
       <InputField
@@ -65,10 +69,15 @@ export const EpisodeSearch = ({ value, onChange, suggestions, onClick }) => {
       />
       {suggestions && (
         <SuggestionsContainer>
-          {suggestions?.map((episode) => (
-            <SearchSuggestion key={episode.id} onClick={onClick}>
-              <span>{episode.name}</span>
-              <img src={episode.images[2].url} alt={episode.name} />
+          {suggestions.map((episode) => (
+            <SearchSuggestion
+              key={episode.id}
+              onClick={() => {
+                history.push(`/details/${episode.id}`);
+              }}
+            >
+              <span title={episode.name}>{episode.name}</span>
+              <img src={episode.images[2]?.url} alt={episode.name} />
             </SearchSuggestion>
           ))}
         </SuggestionsContainer>
@@ -81,7 +90,6 @@ EpisodeSearch.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   suggestions: PropTypes.array,
-  onClick: PropTypes.func,
 };
 
 InputField.propTypes = {
