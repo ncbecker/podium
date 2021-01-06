@@ -1,0 +1,33 @@
+export const light = {
+  bg: "linear-gradient(117deg, #48CAE4, #ADE8F4)",
+  icon: "#000000",
+  buttonText: "#000000",
+  buttonShadow: "3px 3px 5px #00000029",
+  text: "#404040",
+  textOnBg: "#404040",
+  action: "#80FFDB",
+  infoBubble: "#33333333",
+  inputOverlay: "#CAF0F8",
+  cards: "#CAF0F8CB",
+  like: "#EF476F",
+  noLike: "#33333380",
+  noLikeOnBg: "#33333380",
+  timestamp: "#2D00F7",
+};
+
+export const dark = {
+  bg: "#03045E",
+  icon: "#CAF0F8",
+  buttonText: "#000000",
+  buttonShadow: "3px 3px 5px #00000029",
+  text: "#404040",
+  textOnBg: "#CAF0F8",
+  action: "#80FFDB",
+  infoBubble: "#CAF0F8CB",
+  inputOverlay: "#CAF0F8",
+  cards: "#CAF0F8CB",
+  like: "#EF476F",
+  noLike: "#33333380",
+  noLikeOnBg: "#CAF0F8CB",
+  timestamp: "#2D00F7",
+};
