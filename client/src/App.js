@@ -20,16 +20,16 @@ const AppWrapper = styled.div`
 `;
 
 function App() {
-  const [theme, setTheme] = useState(light);
+  const [theme, setTheme] = useState("light");
 
   const handleChangeTheme = () => {
-    setTheme(theme === dark ? light : dark);
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
     <Router>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme === "light" ? light : dark}>
           <AppWrapper>
             <GlobalStyle />
             <Switch>
