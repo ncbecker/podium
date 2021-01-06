@@ -47,8 +47,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
-  color: var(--text-light);
-  background: var(--bg-light);
+  color: ${(props) => props.theme.text};
+  background: ${(props) => props.theme.bg};
   height: 100vh;
   width: 100vw;
 }
