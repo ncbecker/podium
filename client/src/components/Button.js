@@ -9,18 +9,18 @@ export const ActionButton = styled.button`
   width: 248px;
   height: 57px;
   margin-bottom: 15px;
-  background-color: var(--action-light);
+  background-color: ${(props) => props.theme.action};
   border: none;
   border-radius: 30px;
-  box-shadow: var(--button-shadow-light);
+  box-shadow: ${(props) => props.theme.buttonShadow};
   cursor: pointer;
   span {
-    color: var(--button-text-light);
+    color: ${(props) => props.theme.buttonText};
     font-weight: 500;
     margin-right: 10px;
   }
   svg {
-    fill: var(--icon-light);
+    fill: ${(props) => props.theme.buttonText};
   }
 `;
 
