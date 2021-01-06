@@ -1,4 +1,5 @@
 import styled from "styled-components/macro";
+import PropTypes from "prop-types";
 import { ThemeTogglerButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { LogInButton } from "../components/Button.js";
@@ -26,11 +27,11 @@ const ButtonWrapper = styled.div`
   place-self: center;
 `;
 
-function LogInPage() {
+function LogInPage({ toggleTheme }) {
   return (
     <PageWrapper>
       <TopBar>
-        <ThemeTogglerButton />
+        <ThemeTogglerButton onClick={toggleTheme} />
       </TopBar>
       <LogoWrapper>
         <Logo />
@@ -44,5 +45,9 @@ function LogInPage() {
     </PageWrapper>
   );
 }
+
+LogInPage.propTypes = {
+  toggleTheme: PropTypes.func,
+};
 
 export default LogInPage;

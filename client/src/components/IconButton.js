@@ -22,9 +22,9 @@ export const IconButton = styled.button`
   }
 `;
 
-export const ThemeTogglerButton = ({ ...props }) => {
+export const ThemeTogglerButton = ({ onClick }) => {
   return (
-    <IconButton nav {...props}>
+    <IconButton nav onClick={onClick}>
       <ThemeToggler />
     </IconButton>
   );
@@ -119,6 +119,10 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
   onClick: undefined,
+};
+
+ThemeTogglerButton.propTypes = {
+  onClick: PropTypes.func,
 };
 
 FilterButton.propTypes = {
