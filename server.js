@@ -73,7 +73,7 @@ app.get("/oauth/spotify/validate", async (request, response) => {
     maxAge: (expires_in - 60) * 1000,
   });
   response.cookie("refresh", refresh_token);
-  response.redirect("https://ncbecker-podium-pr-68.herokuapp.com/vote");
+  response.redirect(process.env.REDIRECT_URL_VOTE);
 });
 
 app.get("/oauth/spotify/logout", async (request, response) => {
@@ -101,9 +101,7 @@ app.get("/oauth/spotify/refreshtoken", async (request, response) => {
     }
   } catch (error) {
     console.error(error);
-    response.redirect(
-      "https://ncbecker-podium-pr-68.herokuapp.com/oauth/spotify/authorize"
-    );
+    response.redirect(process.env.REDIRECT_URL_AUTH);
   }
 });
 
@@ -114,9 +112,7 @@ app.get("/api/user/profile", async (request, response) => {
   let refreshToken = request.cookies.refresh;
 
   if (!accessToken && !refreshToken) {
-    response.redirect(
-      "https://ncbecker-podium-pr-68.herokuapp.com/oauth/spotify/authorize"
-    );
+    response.redirect(process.env.REDIRECT_URL_AUTH);
     return;
   }
 
