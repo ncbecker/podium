@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components/macro";
-import PropTypes from "prop-types";
 import { useAuth } from "../contexts/AuthContext.js";
 import {
   AddToSpotifyButton,
@@ -119,7 +118,7 @@ function EpisodeDetailsPage() {
   const { id } = useParams();
   const { user } = useAuth();
   const [episodeDetails, setEpisodeDetails] = useState(null);
-  const [isLiked, setIsLiked] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
 
   useEffect(() => {
@@ -195,16 +194,3 @@ function EpisodeDetailsPage() {
 }
 
 export default EpisodeDetailsPage;
-
-EpisodeDetailsPage.propTypes = {
-  imgsrc: PropTypes.string,
-  imgalt: PropTypes.string,
-  title: PropTypes.string,
-  show: PropTypes.string,
-  description: PropTypes.string,
-  date: PropTypes.string,
-  duration: PropTypes.number,
-  liked: PropTypes.bool,
-  likes: PropTypes.number,
-  onClick: PropTypes.func,
-};
