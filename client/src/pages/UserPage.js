@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/macro";
+import styled, { useTheme } from "styled-components/macro";
 import { ArrowBackButton, LogOutButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import { useAuth } from "../contexts/AuthContext.js";
 import { getAllLikedEpisodes } from "../utils/api.js";
@@ -50,6 +51,7 @@ const WelcomeWrapper = styled.span`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: ${(props) => props.theme.textOnBg};
 `;
 const TitleWrapper = styled.span`
   grid-row: 3 / 4;
@@ -57,6 +59,7 @@ const TitleWrapper = styled.span`
   font-size: 2rem;
   font-weight: 500;
   margin: 20px;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const CardsWrapper = styled.div`
@@ -69,6 +72,8 @@ function UserPage() {
   const [fetchData, setFetchData] = useState([]);
 
   const { user, logout } = useAuth();
+
+  const theme = useTheme().theme;
 
   useEffect(() => {
     const doFetch = async () => {
@@ -84,7 +89,7 @@ function UserPage() {
       <TopBar>
         <ArrowBack />
         <LogoContainer>
-          <Logo />
+          {theme === "light" ? <Logo /> : <LogoDark />}
         </LogoContainer>
         <LogOut onClick={logout} />
       </TopBar>

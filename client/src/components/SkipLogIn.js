@@ -8,6 +8,7 @@ const SkipLogInWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  color: ${(props) => props.theme.textOnBg};
   > :first-child {
     margin-right: 0.5rem;
   }
@@ -27,19 +28,22 @@ const InfoBubble = styled.div`
   width: 215px;
   height: 75px;
   padding: 0px;
-  background: var(--info-bubble-light);
+  background: ${(props) => props.theme.infoBubble};
   border-radius: 10px;
   ::after {
     content: "";
     position: absolute;
     border-style: solid;
     border-width: 0 10px 20px;
-    border-color: var(--info-bubble-light) transparent;
+    border-color: ${(props) => props.theme.infoBubble} transparent;
     display: block;
     width: 0;
     z-index: 1;
     top: -20px;
     left: 170px;
+  }
+  p {
+    color: ${(props) => props.theme.text};
   }
 `;
 

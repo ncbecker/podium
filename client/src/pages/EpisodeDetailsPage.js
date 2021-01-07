@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled, { useTheme } from "styled-components/macro";
 import PropTypes from "prop-types";
 import { useAuth } from "../contexts/AuthContext.js";
 import {
@@ -8,6 +8,7 @@ import {
   ArrowBackButton,
 } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
 import { getEpisodeDetailsFromDB } from "../utils/api.js";
@@ -58,6 +59,7 @@ const TitleWrapper = styled.div`
   span {
     font-size: 1.25rem;
     font-weight: 500;
+    color: ${(props) => props.theme.textOnBg};
   }
 `;
 
@@ -70,6 +72,7 @@ const ShowTitle = styled.span`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const Description = styled.span`
@@ -77,6 +80,7 @@ const Description = styled.span`
   margin-bottom: 10px;
   padding-left: 20px;
   grid-row: 4 / 5;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const Stats = styled.span`
@@ -87,6 +91,7 @@ const Stats = styled.span`
   font-size: 0.75rem;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const ButtonWrapper = styled.div`
@@ -117,6 +122,8 @@ function EpisodeDetailsPage() {
   const { user } = useAuth();
   const [episodeDetails, setEpisodeDetails] = useState(null);
 
+  const theme = useTheme().theme;
+
   useEffect(() => {
     const doFetch = async () => {
       const details = await getEpisodeDetailsFromDB(id, user.id);
@@ -136,7 +143,7 @@ function EpisodeDetailsPage() {
       <TopBar>
         <ArrowBack />
         <LogoContainer>
-          <Logo />
+          {theme === "light" ? <Logo /> : <LogoDark />}
         </LogoContainer>
       </TopBar>
       {episodeDetails && (

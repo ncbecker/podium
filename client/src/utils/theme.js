@@ -1,4 +1,5 @@
 export const light = {
+  theme: "light",
   bg: "linear-gradient(117deg, #48CAE4, #ADE8F4)",
   icon: "#000000",
   buttonText: "#000000",
@@ -16,6 +17,7 @@ export const light = {
 };
 
 export const dark = {
+  theme: "dark",
   bg: "#03045E",
   icon: "#CAF0F8",
   buttonText: "#000000",

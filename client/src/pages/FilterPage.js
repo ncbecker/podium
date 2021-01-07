@@ -10,7 +10,7 @@ const FilterPageWrapper = styled.div`
   z-index: 10;
   width: 375px;
   height: ${({ open }) => (open ? "100%" : "0")};
-  background: var(--input-overlay-light);
+  background: ${(props) => props.theme.inputOverlay};
   border-radius: 15px 15px 0 0;
   transition: height 0.4s ease-in-out;
   overflow: hidden;

@@ -18,7 +18,13 @@ export const IconButton = styled.button`
   width: ${(props) => (props.nav ? "48px" : "auto")};
   height: ${(props) => (props.nav ? "48px" : "auto")};
   svg {
-    fill: var(--icon-light);
+    fill: ${(props) => props.theme.icon};
+  }
+`;
+
+const IconButtonOnBg = styled(IconButton)`
+  svg {
+    fill: ${(props) => props.theme.buttonText};
   }
 `;
 
@@ -48,9 +54,9 @@ export const BurgerMenuButton = ({ ...props }) => {
 
 export const CloseButton = ({ onClick }) => {
   return (
-    <IconButton nav onClick={onClick}>
+    <IconButtonOnBg nav onClick={onClick}>
       <Close />
-    </IconButton>
+    </IconButtonOnBg>
   );
 };
 
