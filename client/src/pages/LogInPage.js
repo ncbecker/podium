@@ -31,11 +31,11 @@ function LogInPage() {
     if (process.env.NODE_ENV === "development") {
       return "http://localhost:3001/oauth/spotify/authorize";
     } else {
-      return "https://ncbecker-podium-pr-68.herokuapp.com/oauth/spotify/authorize";
+      return "https://ncbecker-podium.herokuapp.com/oauth/spotify/authorize";
     }
   };
   const authUrl = createDevUrl();
-  console.log(authUrl, process.env.NODE_ENV);
+
   return (
     <PageWrapper>
       <TopBar>
