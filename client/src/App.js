@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components/macro";
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./GlobalStyle";
@@ -11,6 +10,7 @@ import EpisodeDetailsPage from "./pages/EpisodeDetailsPage";
 import UserPage from "./pages/UserPage";
 import MenuLogInPage from "./pages/MenuLogInPage";
 import { dark, light } from "./utils/theme";
+import useLocalStorage from "./utils/useLocalStorage";
 
 const AppWrapper = styled.div`
   max-width: 375px;
@@ -20,16 +20,16 @@ const AppWrapper = styled.div`
 `;
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  const [storedValue, setValue] = useLocalStorage("theme", "light");
 
   const handleChangeTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setValue(storedValue === "dark" ? "light" : "dark");
   };
 
   return (
     <Router>
       <AuthProvider>
-        <ThemeProvider theme={theme === "light" ? light : dark}>
+        <ThemeProvider theme={storedValue === "dark" ? dark : light}>
           <AppWrapper>
             <GlobalStyle />
             <Switch>
