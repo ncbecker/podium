@@ -7,7 +7,7 @@ const InputField = styled.input`
   height: 45px;
   padding: 0 20px;
   margin: 15px 0;
-  background: var(--input-overlay-light);
+  background: ${(props) => props.theme.inputOverlay};
   border: none;
   outline: none;
   border-radius: 30px;
@@ -22,7 +22,7 @@ const SuggestionsContainer = styled.div`
   top: 65px;
   width: 250px;
   padding: 5px 5px 0 5px;
-  background: var(--input-overlay-light);
+  background: ${(props) => props.theme.inputOverlay};
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@ const SuggestionsContainer = styled.div`
 const SearchSuggestion = styled.div`
   margin-bottom: 5px;
   padding: 5px;
-  background: var(--info-bubble-light);
+  background: ${(props) => props.theme.infoBubble};
   border-radius: 5px;
   display: flex;
   justify-content: space-between;

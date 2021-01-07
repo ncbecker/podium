@@ -15,7 +15,7 @@ const Card = styled.div`
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 15px;
-  background: var(--cards-light);
+  background: ${(props) => props.theme.cards};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,7 +54,7 @@ const LikeButton = styled.button`
 const LikeCounter = styled.div`
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--button-text-light);
+  color: ${(props) => props.theme.buttonText};
 `;
 
 const LottieContainer = styled.div`

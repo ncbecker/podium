@@ -64,8 +64,7 @@ const StyledLabel = styled.label`
   padding: 5px;
   width: 100%;
   font-weight: 500;
-  background: ${(props) =>
-    props.checked ? "var(--info-bubble-light)" : "none"};
+  background: ${(props) => (props.checked ? props.theme.label : "none")};
   border-radius: 5px;
   user-select: none;
   outline: none;

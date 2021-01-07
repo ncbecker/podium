@@ -115,6 +115,9 @@ const NotLikedSmall = styled(NotLiked)`
   width: 24px;
   margin-left: 10px;
   display: block;
+  path {
+    fill: ${(props) => props.theme.noLikeOnBg};
+  }
 `;
 
 function EpisodeDetailsPage() {
