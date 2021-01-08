@@ -29,6 +29,14 @@ const ButtonWrapper = styled.div`
 `;
 
 function LogInPage({ toggleTheme }) {
+  const createDevUrl = () => {
+    if (process.env.NODE_ENV === "development") {
+      return "http://localhost:3001/oauth/spotify/authorize";
+    } else {
+      return "https://ncbecker-podium.herokuapp.com/oauth/spotify/authorize";
+    }
+  };
+  const authUrl = createDevUrl();
   const theme = useTheme().theme;
 
   return (
@@ -38,7 +46,7 @@ function LogInPage({ toggleTheme }) {
       </TopBar>
       <LogoWrapper>{theme === "light" ? <Logo /> : <LogoDark />}</LogoWrapper>
       <ButtonWrapper>
-        <a href="http://localhost:3001/oauth/spotify/authorize">
+        <a href={authUrl}>
           <LogInButton />
         </a>
         <SkipLogIn />
