@@ -32,7 +32,7 @@ const SuggestionsContainer = styled.div`
 const SearchSuggestion = styled.div`
   margin-bottom: 5px;
   padding: 5px;
-  background: ${(props) => props.theme.infoBubble};
+  background: ${(props) => props.theme.label};
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
