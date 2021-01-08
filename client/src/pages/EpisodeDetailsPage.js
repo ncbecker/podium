@@ -12,7 +12,7 @@ import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
 import {
   getEpisodeDetailsFromDB,
-  updateEpisodeLikeInDB,
+  addOrUpdateEpisodeInDB,
 } from "../utils/api.js";
 
 const PageWrapper = styled.div`
@@ -156,7 +156,7 @@ function EpisodeDetailsPage() {
       setIsLiked(!isLiked);
       setLikeCount(likeCount + 1);
     }
-    await updateEpisodeLikeInDB(id, user.id, !isLiked);
+    await addOrUpdateEpisodeInDB(id, user.id, !isLiked);
   };
 
   return (

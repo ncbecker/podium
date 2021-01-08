@@ -82,6 +82,16 @@ export async function getSingleEpisodeFromDB(id) {
   return singleEpisode;
 }
 
+export async function addOrUpdateEpisodeInDB(id, userId, liked) {
+  await fetch(`/api/db/episode/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({ userId, liked }),
+  });
+}
+
 export async function updateEpisodeLikeInDB(id, userId, liked) {
   await fetch(`/api/db/episode/${id}`, {
     method: "PATCH",
