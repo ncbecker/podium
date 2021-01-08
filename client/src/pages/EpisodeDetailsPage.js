@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled, { useTheme } from "styled-components/macro";
 import { useAuth } from "../contexts/AuthContext.js";
 import {
   AddToSpotifyButton,
   ArrowBackButton,
 } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
 import {
@@ -60,6 +61,7 @@ const TitleWrapper = styled.div`
   span {
     font-size: 1.25rem;
     font-weight: 500;
+    color: ${(props) => props.theme.textOnBg};
   }
 `;
 
@@ -72,6 +74,7 @@ const ShowTitle = styled.span`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const Description = styled.span`
@@ -79,6 +82,7 @@ const Description = styled.span`
   margin-bottom: 10px;
   padding-left: 20px;
   grid-row: 4 / 5;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const Stats = styled.span`
@@ -89,6 +93,7 @@ const Stats = styled.span`
   font-size: 0.75rem;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: ${(props) => props.theme.textOnBg};
 `;
 
 const ButtonWrapper = styled.div`
@@ -112,6 +117,9 @@ const NotLikedSmall = styled(NotLiked)`
   width: 24px;
   margin-left: 10px;
   display: block;
+  path {
+    fill: ${(props) => props.theme.noLikeOnBg};
+  }
 `;
 
 function EpisodeDetailsPage() {
@@ -120,6 +128,8 @@ function EpisodeDetailsPage() {
   const [episodeDetails, setEpisodeDetails] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
+
+  const theme = useTheme().theme;
 
   useEffect(() => {
     const doFetch = async () => {
@@ -154,7 +164,7 @@ function EpisodeDetailsPage() {
       <TopBar>
         <ArrowBack />
         <LogoContainer>
-          <Logo />
+          {theme === "light" ? <Logo /> : <LogoDark />}
         </LogoContainer>
       </TopBar>
       {episodeDetails && (

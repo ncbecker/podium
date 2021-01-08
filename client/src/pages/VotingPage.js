@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/macro";
+import styled, { useTheme } from "styled-components/macro";
 import { useAuth } from "../contexts/AuthContext.js";
 import {
   BurgerMenuButton,
@@ -7,6 +7,7 @@ import {
   SearchButton,
 } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { EpisodeSearch } from "../components/EpisodeSearch.js";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import FilterPage from "./FilterPage.js";
@@ -69,6 +70,8 @@ function VotingPage() {
 
   const { user, login } = useAuth();
 
+  const theme = useTheme().theme;
+
   useEffect(() => {
     const doLogin = async () => {
       await login();
@@ -116,7 +119,7 @@ function VotingPage() {
       <TopBar>
         <BurgerMenu />
         <LogoContainer>
-          <Logo />
+          {theme === "light" ? <Logo /> : <LogoDark />}
         </LogoContainer>
       </TopBar>
       <SearchWrapper>

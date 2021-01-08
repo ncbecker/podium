@@ -1,6 +1,8 @@
-import styled from "styled-components/macro";
+import styled, { useTheme } from "styled-components/macro";
+import PropTypes from "prop-types";
 import { ThemeTogglerButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
+import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { LogInButton } from "../components/Button.js";
 import { SkipLogIn } from "../components/SkipLogIn.js";
 
@@ -26,7 +28,7 @@ const ButtonWrapper = styled.div`
   place-self: center;
 `;
 
-function LogInPage() {
+function LogInPage({ toggleTheme }) {
   const createDevUrl = () => {
     if (process.env.NODE_ENV === "development") {
       return "http://localhost:3001/oauth/spotify/authorize";
@@ -35,15 +37,14 @@ function LogInPage() {
     }
   };
   const authUrl = createDevUrl();
+  const theme = useTheme().theme;
 
   return (
     <PageWrapper>
       <TopBar>
-        <ThemeTogglerButton />
+        <ThemeTogglerButton onClick={toggleTheme} />
       </TopBar>
-      <LogoWrapper>
-        <Logo />
-      </LogoWrapper>
+      <LogoWrapper>{theme === "light" ? <Logo /> : <LogoDark />}</LogoWrapper>
       <ButtonWrapper>
         <a href={authUrl}>
           <LogInButton />
@@ -53,5 +54,9 @@ function LogInPage() {
     </PageWrapper>
   );
 }
+
+LogInPage.propTypes = {
+  toggleTheme: PropTypes.func,
+};
 
 export default LogInPage;

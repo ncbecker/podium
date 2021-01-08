@@ -18,13 +18,19 @@ export const IconButton = styled.button`
   width: ${(props) => (props.nav ? "48px" : "auto")};
   height: ${(props) => (props.nav ? "48px" : "auto")};
   svg {
-    fill: var(--icon-light);
+    fill: ${(props) => props.theme.icon};
   }
 `;
 
-export const ThemeTogglerButton = ({ ...props }) => {
+const IconButtonOnBg = styled(IconButton)`
+  svg {
+    fill: ${(props) => props.theme.buttonText};
+  }
+`;
+
+export const ThemeTogglerButton = ({ onClick }) => {
   return (
-    <IconButton nav {...props}>
+    <IconButton nav onClick={onClick}>
       <ThemeToggler />
     </IconButton>
   );
@@ -48,9 +54,9 @@ export const BurgerMenuButton = ({ ...props }) => {
 
 export const CloseButton = ({ onClick }) => {
   return (
-    <IconButton nav onClick={onClick}>
+    <IconButtonOnBg nav onClick={onClick}>
       <Close />
-    </IconButton>
+    </IconButtonOnBg>
   );
 };
 
@@ -119,6 +125,10 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
   onClick: undefined,
+};
+
+ThemeTogglerButton.propTypes = {
+  onClick: PropTypes.func,
 };
 
 FilterButton.propTypes = {
