@@ -19,7 +19,7 @@ export const light = {
 
 export const dark = {
   theme: "dark",
-  bg: "#03045E",
+  bg: "#000020",
   icon: "#CAF0F8",
   buttonText: "#000000",
   buttonShadow: "3px 3px 5px #00000029",
