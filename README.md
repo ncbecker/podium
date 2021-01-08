@@ -26,6 +26,14 @@ https://xd.adobe.com/view/47c0820e-b7e7-4464-b887-bf6c82e7c496-1293/
 - [Styled Components](https://styled-components.com/)
 - [React Lottie](https://github.com/chenqingspring/react-lottie)
 - [React Router](https://reactrouter.com/)
+- [dotenv](https://github.com/motdotla/dotenv)
+- [node-fetch](https://github.com/node-fetch/node-fetch)
+- [cookie-parser](http://expressjs.com/en/resources/middleware/cookie-parser.html)
+- [mongoDB](https://www.mongodb.com/)
+- [Spotify API](https://developer.spotify.com/documentation/web-api/)
+- [OAuth](https://oauth.net/)
+- [Context API](https://reactjs.org/docs/context.html)
+- [ThemeProvider](https://styled-components.com/docs/advanced#theming)
 
 ## Attributions:
 
