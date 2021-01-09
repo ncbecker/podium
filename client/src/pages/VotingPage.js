@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components/macro";
 import { useAuth } from "../contexts/AuthContext.js";
-import {
-  BurgerMenuButton,
-  FilterButton,
-  SearchButton,
-} from "../components/IconButton.js";
+import { BurgerMenuButton, FilterButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { EpisodeSearch } from "../components/EpisodeSearch.js";
