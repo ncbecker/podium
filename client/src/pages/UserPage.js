@@ -10,9 +10,13 @@ import { getAllLikedEpisodes } from "../utils/api.js";
 const PageWrapper = styled.div`
   width: 100%;
   height: 100vh;
-  overflow-x: hidden;
   display: grid;
-  grid-template-rows: repeat(3, auto) 1fr;
+  grid-template-rows: repeat(4, auto) 1fr;
+  overflow-x: hidden;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const TopBar = styled.div`
@@ -48,9 +52,6 @@ const WelcomeWrapper = styled.span`
   font-size: 2rem;
   font-weight: 500;
   margin: 20px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: ${(props) => props.theme.textOnBg};
 `;
 const TitleWrapper = styled.span`
@@ -93,8 +94,12 @@ function UserPage() {
         </LogoContainer>
         <LogOut onClick={logout} />
       </TopBar>
-      <WelcomeWrapper>Welcome {user.display_name} 👋</WelcomeWrapper>
-      <TitleWrapper>Your favorites</TitleWrapper>
+      <WelcomeWrapper>
+        <span>Welcome {user.display_name} 👋</span>
+      </WelcomeWrapper>
+      <TitleWrapper>
+        <span>Your favorites</span>
+      </TitleWrapper>
       <CardsWrapper>
         {fetchData?.map((episodeInfo) => (
           <EpisodeCard
