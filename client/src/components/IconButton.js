@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ThemeToggler } from "../assets/icon-sun-empty.svg";
 import { ReactComponent as BurgerMenu } from "../assets/icon-burger-menu.svg";
+import { ReactComponent as UserAccount } from "../assets/icon-account.svg";
 import { ReactComponent as Close } from "../assets/icon-close.svg";
 import { ReactComponent as ArrowBack } from "../assets/icon-arrow-back.svg";
 import { ReactComponent as LogOut } from "../assets/icon-logout.svg";
@@ -17,6 +18,7 @@ export const IconButton = styled.button`
   align-items: center;
   width: ${(props) => (props.nav ? "48px" : "auto")};
   height: ${(props) => (props.nav ? "48px" : "auto")};
+  margin-left: ${(props) => props.arrow && "10px"};
   svg {
     fill: ${(props) => props.theme.icon};
   }
@@ -52,6 +54,22 @@ export const BurgerMenuButton = ({ ...props }) => {
   );
 };
 
+export const UserAccountButton = ({ ...props }) => {
+  const history = useHistory();
+
+  return (
+    <IconButton
+      nav
+      onClick={() => {
+        history.push("/user");
+      }}
+      {...props}
+    >
+      <UserAccount />
+    </IconButton>
+  );
+};
+
 export const CloseButton = ({ onClick }) => {
   return (
     <IconButtonOnBg nav onClick={onClick}>
@@ -65,7 +83,7 @@ export const ArrowBackButton = ({ ...props }) => {
 
   return (
     <IconButton
-      nav
+      arrow
       onClick={() => {
         history.goBack();
       }}
