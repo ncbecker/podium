@@ -109,11 +109,6 @@ function VotingPage() {
     setSearchData(event.target.value);
   };
 
-  const handleSubmitSearch = async (event) => {
-    event.preventDefault();
-    setSearchData("");
-  };
-
   return (
     <PageWrapper>
       <TopBar>
@@ -123,13 +118,12 @@ function VotingPage() {
         </LogoContainer>
       </TopBar>
       <SearchWrapper>
-        <FilterButton onClick={handleClickFilter} />
         <EpisodeSearch
           value={searchData}
           onChange={handleChangeSearch}
           suggestions={suggestions}
         />
-        <SearchButton onClick={handleSubmitSearch} />
+        <FilterButton onClick={handleClickFilter} />
       </SearchWrapper>
       <FilterPage open={open} onClick={handleClickFilter} />
       <CardsWrapper>
