@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ThemeToggler } from "../assets/icon-sun-empty.svg";
@@ -16,8 +16,16 @@ export const IconButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${(props) => (props.nav ? "48px" : "auto")};
-  height: ${(props) => (props.nav ? "48px" : "auto")};
+  ${(props) =>
+    props.nav
+      ? css`
+          width: 48px;
+          height: 48px;
+        `
+      : css`
+          width: auto;
+          height: auto;
+        `};
   margin-left: ${(props) => props.arrow && "10px"};
   svg {
     fill: ${(props) => props.theme.icon};
