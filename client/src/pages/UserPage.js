@@ -28,12 +28,12 @@ const TopBar = styled.div`
 `;
 
 const ArrowBack = styled(ArrowBackButton)`
-  grid-area: "back";
+  grid-area: back;
   justify-self: start;
 `;
 
 const LogoContainer = styled.div`
-  grid-area: "logo";
+  grid-area: logo;
   place-self: center;
   svg {
     width: 53.67px;
@@ -42,7 +42,7 @@ const LogoContainer = styled.div`
 `;
 
 const LogOut = styled(LogOutButton)`
-  grid-area: "logout";
+  grid-area: logout;
   justify-self: end;
 `;
 

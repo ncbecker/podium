@@ -36,12 +36,12 @@ const TopBar = styled.div`
 `;
 
 const ArrowBack = styled(ArrowBackButton)`
-  grid-area: "back";
+  grid-area: back;
   justify-self: start;
 `;
 
 const LogoContainer = styled.div`
-  grid-area: "logo";
+  grid-area: logo;
   svg {
     width: 53.67px;
     height: 16px;
@@ -78,6 +78,7 @@ const Description = styled.span`
   margin: 10px 20px;
   grid-row: 4 / 5;
   color: ${(props) => props.theme.textOnBg};
+  overflow-wrap: anywhere;
 `;
 
 const Stats = styled.span`

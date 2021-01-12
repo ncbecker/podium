@@ -26,17 +26,17 @@ const TopBar = styled.div`
   place-self: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "menu logo .";
+  grid-template-areas: "usermenu logo .";
   place-items: center;
 `;
 
 const BurgerMenu = styled(BurgerMenuButton)`
-  grid-area: "menu";
+  grid-area: usermenu;
   justify-self: start;
 `;
 
 const LogoContainer = styled.div`
-  grid-area: "logo";
+  grid-area: logo;
   svg {
     width: 53.67px;
     height: 16px;
