@@ -277,12 +277,22 @@ app.get("/api/db/users", async (request, response) => {
 
 // Episodes
 
-app.post("/api/db/episode/:id", async (request, response) => {
+app.put("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
-  const { userId } = request.body;
+  const { userId, liked } = request.body;
   try {
-    await setEpisode(id, userId);
-    response.status(200).send("Episode is set in database.");
+    const episodeInDb = await getSingleEpisode(id);
+    if (episodeInDb) {
+      if (liked) {
+        await updateEpisodeLiked(id, userId);
+      } else {
+        await updateEpisodeUnliked(id, userId);
+      }
+      response.status(200).send("Database updated.");
+    } else {
+      await setEpisode(id, userId);
+      response.status(200).send("Episode is set in database.");
+    }
   } catch (error) {
     console.error(error);
     if (error.code === 11000) {

@@ -18,7 +18,7 @@ export async function logoutUser() {
 
 // Spotify API
 
-export async function getCurrentUserProfile(token) {
+export async function getCurrentUserProfile() {
   const response = await fetch("/api/user/profile");
   const userProfileData = await response.json();
   return userProfileData;
@@ -80,6 +80,16 @@ export async function getSingleEpisodeFromDB(id) {
   const response = await fetch(`/api/db/episode/${id}`);
   const singleEpisode = await response.json();
   return singleEpisode;
+}
+
+export async function addOrUpdateEpisodeInDB(id, userId, liked) {
+  await fetch(`/api/db/episode/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({ userId, liked }),
+  });
 }
 
 export async function updateEpisodeLikeInDB(id, userId, liked) {

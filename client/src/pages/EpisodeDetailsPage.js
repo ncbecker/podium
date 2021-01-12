@@ -12,7 +12,7 @@ import { ReactComponent as NotLiked } from "../assets/icon-heart-empty.svg";
 import { ReactComponent as Liked } from "../assets/icon-heart-full.svg";
 import {
   getEpisodeDetailsFromDB,
-  updateEpisodeLikeInDB,
+  addOrUpdateEpisodeInDB,
 } from "../utils/api.js";
 
 const PageWrapper = styled.div`
@@ -20,10 +20,14 @@ const PageWrapper = styled.div`
   height: 100vh;
   display: grid;
   grid-template-rows: repeat(6, auto) 1fr;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const TopBar = styled.div`
-  width: 100%;
+  min-height: 48px;
   grid-row: 1 / 2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -32,12 +36,12 @@ const TopBar = styled.div`
 `;
 
 const ArrowBack = styled(ArrowBackButton)`
-  grid-area: "back";
+  grid-area: back;
   justify-self: start;
 `;
 
 const LogoContainer = styled.div`
-  grid-area: "logo";
+  grid-area: logo;
   svg {
     width: 53.67px;
     height: 16px;
@@ -45,12 +49,10 @@ const LogoContainer = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-  width: 320px;
-  margin: 10px 0;
-  padding-left: 20px;
+  margin: 10px 20px;
   grid-row: 2 / 3;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   img {
     width: 100px;
@@ -66,40 +68,29 @@ const TitleWrapper = styled.div`
 `;
 
 const ShowTitle = styled.span`
-  width: 320px;
-  margin-bottom: 10px;
-  padding-left: 20px;
+  margin: 10px 20px;
   grid-row: 3 / 4;
   font-weight: 500;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: ${(props) => props.theme.textOnBg};
 `;
 
 const Description = styled.span`
-  width: 320px;
-  margin-bottom: 10px;
-  padding-left: 20px;
+  margin: 10px 20px;
   grid-row: 4 / 5;
   color: ${(props) => props.theme.textOnBg};
+  overflow-wrap: anywhere;
 `;
 
 const Stats = styled.span`
-  width: 320px;
-  margin-bottom: 10px;
-  padding-left: 20px;
+  margin: 10px 20px;
   grid-row: 5 / 6;
   font-size: 0.75rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: ${(props) => props.theme.textOnBg};
 `;
 
 const ButtonWrapper = styled.div`
-  width: 320px;
-  margin-bottom: 10px;
-  padding-left: 20px;
+  margin: 10px 20px;
+  padding: 10px;
   grid-row: 6 / 7;
   display: flex;
   justify-content: flex-end;
@@ -156,7 +147,7 @@ function EpisodeDetailsPage() {
       setIsLiked(!isLiked);
       setLikeCount(likeCount + 1);
     }
-    await updateEpisodeLikeInDB(id, user.id, !isLiked);
+    await addOrUpdateEpisodeInDB(id, user.id, !isLiked);
   };
 
   return (

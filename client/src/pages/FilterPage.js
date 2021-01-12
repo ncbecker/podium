@@ -13,7 +13,10 @@ const FilterPageWrapper = styled.div`
   background: ${(props) => props.theme.inputOverlay};
   border-radius: 15px 15px 0 0;
   transition: height 0.4s ease-in-out;
-  overflow: hidden;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const FilterWrapper = styled.div`

@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components/macro";
 import { useAuth } from "../contexts/AuthContext.js";
-import {
-  BurgerMenuButton,
-  FilterButton,
-  SearchButton,
-} from "../components/IconButton.js";
+import { BurgerMenuButton, FilterButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { EpisodeSearch } from "../components/EpisodeSearch.js";
@@ -30,17 +26,17 @@ const TopBar = styled.div`
   place-self: center;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "menu logo .";
+  grid-template-areas: "usermenu logo .";
   place-items: center;
 `;
 
 const BurgerMenu = styled(BurgerMenuButton)`
-  grid-area: "menu";
+  grid-area: usermenu;
   justify-self: start;
 `;
 
 const LogoContainer = styled.div`
-  grid-area: "logo";
+  grid-area: logo;
   svg {
     width: 53.67px;
     height: 16px;
@@ -109,11 +105,6 @@ function VotingPage() {
     setSearchData(event.target.value);
   };
 
-  const handleSubmitSearch = async (event) => {
-    event.preventDefault();
-    setSearchData("");
-  };
-
   return (
     <PageWrapper>
       <TopBar>
@@ -123,13 +114,12 @@ function VotingPage() {
         </LogoContainer>
       </TopBar>
       <SearchWrapper>
-        <FilterButton onClick={handleClickFilter} />
         <EpisodeSearch
           value={searchData}
           onChange={handleChangeSearch}
           suggestions={suggestions}
         />
-        <SearchButton onClick={handleSubmitSearch} />
+        <FilterButton onClick={handleClickFilter} />
       </SearchWrapper>
       <FilterPage open={open} onClick={handleClickFilter} />
       <CardsWrapper>
