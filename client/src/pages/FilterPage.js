@@ -2,6 +2,7 @@ import styled from "styled-components/macro";
 import PropTypes from "prop-types";
 import { CloseButton } from "../components/IconButton.js";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const FilterPageWrapper = styled.div`
   position: absolute;
@@ -111,6 +112,11 @@ function FilterPage({ open, onClick }) {
     event.preventDefault();
     console.log(timeFilter);
     console.log(categoryFilter);
+    toast("Filter not fully supported yet", {
+      style: {
+        "font-size": "12px",
+      },
+    });
   };
 
   return (
