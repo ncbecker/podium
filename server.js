@@ -277,7 +277,7 @@ app.get("/api/db/users", async (request, response) => {
 
 // Episodes
 
-app.post("/api/db/episode/:id", async (request, response) => {
+app.put("/api/db/episode/:id", async (request, response) => {
   const { id } = request.params;
   const { userId, liked } = request.body;
   try {
