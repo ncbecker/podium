@@ -11,6 +11,7 @@ import UserPage from "./pages/UserPage";
 import MenuLogInPage from "./pages/MenuLogInPage";
 import { dark, light } from "./utils/theme";
 import useLocalStorage from "./utils/useLocalStorage";
+import { Toaster } from "react-hot-toast";
 
 const AppWrapper = styled.div`
   max-width: 375px;
@@ -32,6 +33,7 @@ function App() {
         <ThemeProvider theme={storedValue === "dark" ? dark : light}>
           <AppWrapper>
             <GlobalStyle />
+            <Toaster />
             <Switch>
               <Route exact path="/">
                 <LogInPage toggleTheme={handleChangeTheme} />

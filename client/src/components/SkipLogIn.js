@@ -1,15 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { InfoButton } from "./IconButton";
 
 const SkipLogInWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  color: ${(props) => props.theme.textOnBg};
   > :first-child {
+    color: ${(props) => props.theme.textOnBg};
     margin-right: 0.5rem;
   }
 `;
@@ -55,9 +55,17 @@ export const SkipLogIn = () => {
   return (
     <>
       <SkipLogInWrapper>
-        <Link to="/">
+        <button
+          onClick={() =>
+            toast("Unauthenticated app not yet supported", {
+              style: {
+                "font-size": "12px",
+              },
+            })
+          }
+        >
           <span>Skip and let me vote!</span>
-        </Link>
+        </button>
         <InfoButton onClick={handleClickInfo} />
         {visible && (
           <InfoBubbleWrapper>
