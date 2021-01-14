@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components/macro";
+import { useAuth } from "../contexts/AuthContext.js";
+import { useQuery } from "react-query";
 import { ArrowBackButton, LogOutButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { EpisodeCard } from "../components/EpisodeCard.js";
-import { useAuth } from "../contexts/AuthContext.js";
 import { getAllLikedEpisodes } from "../utils/api.js";
 
 const PageWrapper = styled.div`
@@ -70,20 +70,13 @@ const CardsWrapper = styled.div`
 `;
 
 function UserPage() {
-  const [fetchData, setFetchData] = useState([]);
-
   const { user, logout } = useAuth();
 
   const theme = useTheme().theme;
 
-  useEffect(() => {
-    const doFetch = async () => {
-      const allLikedEpisodes = await getAllLikedEpisodes(user.id);
-      setFetchData(allLikedEpisodes);
-    };
-
-    doFetch();
-  }, [user.id]);
+  const { data: userLikes, status } = useQuery(["userlikes", user.id], () =>
+    getAllLikedEpisodes(user.id)
+  );
 
   return (
     <PageWrapper>
@@ -101,17 +94,22 @@ function UserPage() {
         <span>Your favorites</span>
       </TitleWrapper>
       <CardsWrapper>
-        {fetchData?.map((episodeInfo) => (
-          <EpisodeCard
-            key={episodeInfo.id}
-            episodeId={episodeInfo.id}
-            imgsrc={episodeInfo.images[1]?.url}
-            imgalt={episodeInfo.show.name}
-            title={episodeInfo.name}
-            liked={episodeInfo.liked}
-            likes={episodeInfo.likes}
-          />
-        ))}
+        {status === "loading" && <div>Loading...</div>}
+        {status === "error" && (
+          <div>An unexpected error occured - please restart!</div>
+        )}
+        {status === "success" &&
+          userLikes?.map((episodeInfo) => (
+            <EpisodeCard
+              key={episodeInfo.id}
+              episodeId={episodeInfo.id}
+              imgsrc={episodeInfo.images[1]?.url}
+              imgalt={episodeInfo.show.name}
+              title={episodeInfo.name}
+              liked={episodeInfo.liked}
+              likes={episodeInfo.likes}
+            />
+          ))}
       </CardsWrapper>
     </PageWrapper>
   );
