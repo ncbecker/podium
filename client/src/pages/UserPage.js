@@ -96,7 +96,7 @@ function UserPage() {
       <CardsWrapper>
         {status === "loading" && <div>Loading...</div>}
         {status === "error" && (
-          <div>An unexpected error occured - please restart!</div>
+          <div>An unexpected error occured - please go back to homepage!</div>
         )}
         {status === "success" &&
           userLikes?.map((episodeInfo) => (

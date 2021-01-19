@@ -143,7 +143,7 @@ function VotingPage() {
       <CardsWrapper>
         {statusVotedEpisodes === "loading" && <div>Loading...</div>}
         {statusVotedEpisodes === "error" && (
-          <div>An unexpected error occured - please restart!</div>
+          <div>An unexpected error occured - please go back to homepage!</div>
         )}
         {statusVotedEpisodes === "success" &&
           votedEpisodes?.map((episodeInfo) => (
