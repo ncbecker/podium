@@ -77,8 +77,7 @@ function VotingPage() {
     ["voting", user],
     async () => {
       if (user) {
-        const data = getAllEpisodesAndLikes(user.id);
-        return data;
+        return await getAllEpisodesAndLikes(user.id);
       }
     },
     {

@@ -128,8 +128,7 @@ function EpisodeDetailsPage() {
     ["voting", id, user.id],
     async () => {
       if (id && user.id) {
-        const data = await getEpisodeDetailsFromDB(id, user.id);
-        return data;
+        return await getEpisodeDetailsFromDB(id, user.id);
       }
     }
   );
