@@ -15,6 +15,7 @@ import {
   getEpisodeDetailsFromDB,
   addOrUpdateEpisodeInDB,
 } from "../utils/api.js";
+import LoadingIndicator from "../components/LoadingIndicator.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -159,7 +160,7 @@ function EpisodeDetailsPage() {
           {theme === "light" ? <Logo /> : <LogoDark />}
         </LogoContainer>
       </TopBar>
-      {statusEpisodeDetails === "loading" && <div>Loading...</div>}
+      {statusEpisodeDetails === "loading" && <LoadingIndicator />}
       {statusEpisodeDetails === "error" && (
         <div>An unexpected error occured - please go back to homepage!</div>
       )}

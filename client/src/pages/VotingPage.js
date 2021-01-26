@@ -9,6 +9,7 @@ import { EpisodeSearch } from "../components/EpisodeSearch.js";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import FilterPage from "./FilterPage.js";
 import { searchEpisode, getAllEpisodesAndLikes } from "../utils/api.js";
+import LoadingIndicator from "../components/LoadingIndicator.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -141,7 +142,7 @@ function VotingPage() {
       </SearchWrapper>
       <FilterPage open={open} onClick={handleClickFilter} />
       <CardsWrapper>
-        {statusVotedEpisodes === "loading" && <div>Loading...</div>}
+        {statusVotedEpisodes === "loading" && <LoadingIndicator />}
         {statusVotedEpisodes === "error" && (
           <div>An unexpected error occured - please go back to homepage!</div>
         )}

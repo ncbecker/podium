@@ -6,6 +6,7 @@ import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import { getAllLikedEpisodes } from "../utils/api.js";
+import LoadingIndicator from "../components/LoadingIndicator.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -94,7 +95,7 @@ function UserPage() {
         <span>Your favorites</span>
       </TitleWrapper>
       <CardsWrapper>
-        {status === "loading" && <div>Loading...</div>}
+        {status === "loading" && <LoadingIndicator />}
         {status === "error" && (
           <div>An unexpected error occured - please go back to homepage!</div>
         )}
