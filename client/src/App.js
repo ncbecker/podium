@@ -13,6 +13,7 @@ import { dark, light } from "./utils/theme";
 import useLocalStorage from "./utils/useLocalStorage";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const AppWrapper = styled.div`
   max-width: 375px;
@@ -31,8 +32,8 @@ function App() {
   const queryClient = new QueryClient();
 
   return (
-    <Router>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <Router>
         <AuthProvider>
           <ThemeProvider theme={storedValue === "dark" ? dark : light}>
             <AppWrapper>
@@ -54,8 +55,9 @@ function App() {
             </AppWrapper>
           </ThemeProvider>
         </AuthProvider>
-      </QueryClientProvider>
-    </Router>
+      </Router>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
