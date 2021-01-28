@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import styled, { useTheme } from "styled-components/macro";
+import { useQuery } from "react-query";
 import { useAuth } from "../contexts/AuthContext.js";
+import styled, { useTheme } from "styled-components/macro";
 import { BurgerMenuButton, FilterButton } from "../components/IconButton.js";
 import { ReactComponent as Logo } from "../assets/text-logo-iheart.svg";
 import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme.svg";
@@ -8,6 +9,8 @@ import { EpisodeSearch } from "../components/EpisodeSearch.js";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import FilterPage from "./FilterPage.js";
 import { searchEpisode, getAllEpisodesAndLikes } from "../utils/api.js";
+import LoadingIndicator from "../components/LoadingIndicator.js";
+import useDebounce from "../utils/useDebounce.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -61,8 +64,6 @@ const CardsWrapper = styled.div`
 function VotingPage() {
   const [open, setOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
-  const [fetchData, setFetchData] = useState([]);
-  const [suggestions, setSuggestions] = useState(null);
 
   const { user, login } = useAuth();
 
@@ -72,30 +73,24 @@ function VotingPage() {
     const doLogin = async () => {
       await login();
     };
-    const doFetch = async () => {
-      const allEpisodesAndLikes = await getAllEpisodesAndLikes(user.id);
-      setFetchData(allEpisodesAndLikes);
-    };
     doLogin();
-    if (user) {
-      doFetch();
-    }
-  }, [login, user]);
+  }, [login]);
 
-  useEffect(() => {
-    const doFetch = async () => {
-      if (searchData.length === 0) {
-        setSuggestions(null);
-        return;
-      }
-      const searchResults = await searchEpisode(searchData);
-      setSuggestions(searchResults);
-    };
-    const timeoutId = setTimeout(doFetch, 600);
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [searchData]);
+  const { data: votedEpisodes, status: statusVotedEpisodes } = useQuery(
+    ["voting", user],
+    () => getAllEpisodesAndLikes(user.id),
+    {
+      enabled: !!user,
+    }
+  );
+
+  const debouncedSearchData = useDebounce(searchData, 600);
+
+  const { data: suggestions } = useQuery(
+    ["search", debouncedSearchData],
+    () => searchEpisode(debouncedSearchData),
+    { enabled: !!debouncedSearchData }
+  );
 
   const handleClickFilter = () => {
     setOpen(!open);
@@ -123,17 +118,22 @@ function VotingPage() {
       </SearchWrapper>
       <FilterPage open={open} onClick={handleClickFilter} />
       <CardsWrapper>
-        {fetchData?.map((episodeInfo) => (
-          <EpisodeCard
-            key={episodeInfo.id}
-            episodeId={episodeInfo.id}
-            imgsrc={episodeInfo.images[1]?.url}
-            imgalt={episodeInfo.show.name}
-            title={episodeInfo.name}
-            liked={episodeInfo.liked}
-            likes={episodeInfo.likes}
-          />
-        ))}
+        {statusVotedEpisodes === "loading" && <LoadingIndicator />}
+        {statusVotedEpisodes === "error" && (
+          <div>An unexpected error occured - please go back to homepage!</div>
+        )}
+        {statusVotedEpisodes === "success" &&
+          votedEpisodes?.map((episodeInfo) => (
+            <EpisodeCard
+              key={episodeInfo.id}
+              episodeId={episodeInfo.id}
+              imgsrc={episodeInfo.images[1]?.url}
+              imgalt={episodeInfo.show.name}
+              title={episodeInfo.name}
+              liked={episodeInfo.liked}
+              likes={episodeInfo.likes}
+            />
+          ))}
       </CardsWrapper>
     </PageWrapper>
   );

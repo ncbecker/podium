@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled, { useTheme } from "styled-components/macro";
 import { useAuth } from "../contexts/AuthContext.js";
+import { useQuery } from "react-query";
 import {
   AddToSpotifyButton,
   ArrowBackButton,
@@ -14,6 +15,7 @@ import {
   getEpisodeDetailsFromDB,
   addOrUpdateEpisodeInDB,
 } from "../utils/api.js";
+import LoadingIndicator from "../components/LoadingIndicator.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -116,21 +118,20 @@ const NotLikedSmall = styled(NotLiked)`
 function EpisodeDetailsPage() {
   const { id } = useParams();
   const { user } = useAuth();
-  const [episodeDetails, setEpisodeDetails] = useState(null);
+
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
 
   const theme = useTheme().theme;
 
-  useEffect(() => {
-    const doFetch = async () => {
-      const details = await getEpisodeDetailsFromDB(id, user.id);
-      setEpisodeDetails(details);
-    };
-    if (id && user.id) {
-      doFetch();
+  const { data: episodeDetails, status: statusEpisodeDetails } = useQuery(
+    ["voting", id, user.id],
+    async () => {
+      if (id && user.id) {
+        return await getEpisodeDetailsFromDB(id, user.id);
+      }
     }
-  }, [id, user.id]);
+  );
 
   useEffect(() => {
     if (episodeDetails) {
@@ -158,6 +159,10 @@ function EpisodeDetailsPage() {
           {theme === "light" ? <Logo /> : <LogoDark />}
         </LogoContainer>
       </TopBar>
+      {statusEpisodeDetails === "loading" && <LoadingIndicator />}
+      {statusEpisodeDetails === "error" && (
+        <div>An unexpected error occured - please go back to homepage!</div>
+      )}
       {episodeDetails && (
         <>
           <TitleWrapper>
