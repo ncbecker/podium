@@ -10,6 +10,7 @@ import { EpisodeCard } from "../components/EpisodeCard.js";
 import FilterPage from "./FilterPage.js";
 import { searchEpisode, getAllEpisodesAndLikes } from "../utils/api.js";
 import LoadingIndicator from "../components/LoadingIndicator.js";
+import useDebounce from "../utils/useDebounce.js";
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -63,57 +64,33 @@ const CardsWrapper = styled.div`
 function VotingPage() {
   const [open, setOpen] = useState(false);
   const [searchData, setSearchData] = useState("");
-  const [suggestions, setSuggestions] = useState(null);
 
   const { user, login } = useAuth();
 
   const theme = useTheme().theme;
-
-  const {
-    data: votedEpisodes,
-    status: statusVotedEpisodes,
-    refetch: refetchVotedEpisodes,
-  } = useQuery(
-    ["voting", user],
-    async () => {
-      if (user) {
-        return await getAllEpisodesAndLikes(user.id);
-      }
-    },
-    {
-      enabled: false,
-    }
-  );
-
-  const { data: searchResults, refetch: refetchSearch } = useQuery(
-    ["search", searchData],
-    searchEpisode,
-    { enabled: false }
-  );
 
   useEffect(() => {
     const doLogin = async () => {
       await login();
     };
     doLogin();
+  }, [login]);
 
-    refetchVotedEpisodes();
-  }, [login, refetchVotedEpisodes]);
+  const { data: votedEpisodes, status: statusVotedEpisodes } = useQuery(
+    ["voting", user],
+    () => getAllEpisodesAndLikes(user.id),
+    {
+      enabled: !!user,
+    }
+  );
 
-  useEffect(() => {
-    const doFetch = async () => {
-      if (searchData.length === 0) {
-        setSuggestions(null);
-        return;
-      }
-      refetchSearch();
-      setSuggestions(searchResults);
-    };
-    const timeoutId = setTimeout(doFetch, 600);
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [searchData, refetchSearch, searchResults]);
+  const debouncedSearchData = useDebounce(searchData, 600);
+
+  const { data: suggestions } = useQuery(
+    ["search", debouncedSearchData],
+    () => searchEpisode(debouncedSearchData),
+    { enabled: !!debouncedSearchData }
+  );
 
   const handleClickFilter = () => {
     setOpen(!open);
