@@ -65,6 +65,7 @@ const LottieContainer = styled.div`
 `;
 
 export const EpisodeCard = ({
+  lastEpisodeCardRef,
   episodeId,
   imgsrc,
   imgalt,
@@ -100,7 +101,7 @@ export const EpisodeCard = ({
   };
 
   return (
-    <Card>
+    <Card ref={lastEpisodeCardRef}>
       <EpisodeInfos
         onClick={() => {
           history.push(`/details/${episodeId}`);
@@ -128,6 +129,7 @@ export const EpisodeCard = ({
 };
 
 EpisodeCard.propTypes = {
+  lastEpisodeCardRef: PropTypes.func,
   episodeId: PropTypes.string,
   imgsrc: PropTypes.string,
   imgalt: PropTypes.string,
