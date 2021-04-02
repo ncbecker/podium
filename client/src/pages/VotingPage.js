@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useState, useEffect, useRef, useCallback, Fragment } from "react";
+import { useQuery, useInfiniteQuery } from "react-query";
 import { useAuth } from "../contexts/AuthContext.js";
 import styled, { useTheme } from "styled-components/macro";
 import { BurgerMenuButton, FilterButton } from "../components/IconButton.js";
@@ -8,7 +8,7 @@ import { ReactComponent as LogoDark } from "../assets/text-logo-iheart-darktheme
 import { EpisodeSearch } from "../components/EpisodeSearch.js";
 import { EpisodeCard } from "../components/EpisodeCard.js";
 import FilterPage from "./FilterPage.js";
-import { searchEpisode, getAllEpisodesAndLikes } from "../utils/api.js";
+import { searchEpisode, getAllVotedEpisodes } from "../utils/api.js";
 import LoadingIndicator from "../components/LoadingIndicator.js";
 import useDebounce from "../utils/useDebounce.js";
 
@@ -76,12 +76,42 @@ function VotingPage() {
     doLogin();
   }, [login]);
 
-  const { data: votedEpisodes, status: statusVotedEpisodes } = useQuery(
-    ["voting", user],
-    () => getAllEpisodesAndLikes(user.id),
+  const {
+    data: votedEpisodes,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery(
+    "voting",
+    ({ pageParam = 0 }) => getAllVotedEpisodes(user.id, pageParam),
     {
       enabled: !!user,
+      getNextPageParam: (lastPage) => lastPage.nextSkip ?? false,
     }
+  );
+
+  const observer = useRef();
+
+  const lastEpisodeCardRef = useCallback(
+    (node) => {
+      if (status === "loading") return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        },
+        {
+          root: null,
+          threshold: 0,
+          rootMargin: "0px",
+        }
+      );
+      if (node) observer.current.observe(node);
+    },
+    [status, hasNextPage, fetchNextPage]
   );
 
   const debouncedSearchData = useDebounce(searchData, 600);
@@ -118,23 +148,48 @@ function VotingPage() {
       </SearchWrapper>
       <FilterPage open={open} onClick={handleClickFilter} />
       <CardsWrapper>
-        {statusVotedEpisodes === "loading" && <LoadingIndicator />}
-        {statusVotedEpisodes === "error" && (
+        {status === "loading" && <LoadingIndicator />}
+        {status === "error" && (
           <div>An unexpected error occured - please go back to homepage!</div>
         )}
-        {statusVotedEpisodes === "success" &&
-          votedEpisodes?.map((episodeInfo) => (
-            <EpisodeCard
-              key={episodeInfo.id}
-              episodeId={episodeInfo.id}
-              imgsrc={episodeInfo.images[1]?.url}
-              imgalt={episodeInfo.show.name}
-              title={episodeInfo.name}
-              liked={episodeInfo.liked}
-              likes={episodeInfo.likes}
-            />
+        {status === "success" &&
+          votedEpisodes.pages.map((group, i) => (
+            <Fragment key={i}>
+              {group.data.map((episodeInfo, index) => {
+                if (
+                  votedEpisodes.pages.length === i + 1 &&
+                  group.data.length === index + 1
+                ) {
+                  return (
+                    <EpisodeCard
+                      lastEpisodeCardRef={lastEpisodeCardRef}
+                      key={episodeInfo.id}
+                      episodeId={episodeInfo.id}
+                      imgsrc={episodeInfo.images[1]?.url}
+                      imgalt={episodeInfo.show.name}
+                      title={episodeInfo.name}
+                      liked={episodeInfo.liked}
+                      likes={episodeInfo.likes}
+                    />
+                  );
+                } else {
+                  return (
+                    <EpisodeCard
+                      key={episodeInfo.id}
+                      episodeId={episodeInfo.id}
+                      imgsrc={episodeInfo.images[1]?.url}
+                      imgalt={episodeInfo.show.name}
+                      title={episodeInfo.name}
+                      liked={episodeInfo.liked}
+                      likes={episodeInfo.likes}
+                    />
+                  );
+                }
+              })}
+            </Fragment>
           ))}
       </CardsWrapper>
+      {isFetchingNextPage && <LoadingIndicator />}
     </PageWrapper>
   );
 }

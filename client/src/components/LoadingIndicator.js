@@ -3,9 +3,8 @@ import { ReactComponent as LoadingIcon } from "../assets/loading.svg";
 
 const Container = styled.div`
   padding: 1rem;
-  display: inline-block;
+  display: block;
   text-align: center;
-  vertical-align: top;
   svg path,
   svg rect {
     fill: ${(props) => props.theme.icon};

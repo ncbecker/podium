@@ -19,6 +19,7 @@ const {
 } = require("./lib/SpotifyAccess");
 const {
   getAllEpisodes,
+  getPaginatedEpisodes,
   getAllUsers,
   getSingleEpisode,
   getSingleUser,
@@ -418,8 +419,10 @@ app.get("/api/db/episodes/:id", async (request, response) => {
   }
 });
 
-app.get("/api/episodes-likes/:id", async (request, response) => {
-  const { id } = request.params;
+app.get("/api/episodes-likes", async (request, response) => {
+  const skip = request.query.skip;
+  const userId = request.headers.authorization;
+
   let appAccessToken = request.cookies.appaccess;
   try {
     if (!appAccessToken) {
@@ -433,15 +436,15 @@ app.get("/api/episodes-likes/:id", async (request, response) => {
       appAccessToken = newAppAccessToken;
     }
     await deleteManyEpisodes();
-    const allEpisodes = await getAllEpisodes();
-    const q = allEpisodes.map((item) => item._id).toString();
+    const [paginatedEpisodes, nextSkip] = await getPaginatedEpisodes(skip);
+    const q = paginatedEpisodes.map((item) => item._id).toString();
     const episodeInfos = await getManyEpisodeInfos(appAccessToken, q);
-    const allEpisodesAndLikes = allEpisodes.map((data) => ({
+    const allEpisodesAndLikes = paginatedEpisodes.map((data) => ({
       ...data,
-      liked: data.users.includes(id),
+      liked: data.users.includes(userId),
       ...episodeInfos.episodes.find((episode) => episode.id === data._id),
     }));
-    response.status(200).send(allEpisodesAndLikes);
+    response.status(200).send({ data: allEpisodesAndLikes, nextSkip });
   } catch (error) {
     console.error(error);
     response
